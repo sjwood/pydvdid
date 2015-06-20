@@ -1,4 +1,8 @@
 language: python
 python:
-  - "2.7"
-script: "$TRAVIS_BUILD_DIR/build.sh && $TRAVIS_BUILD_DIR/test.sh"
+    - "2.7"
+install:
+    - pip install coverage
+script:
+    - "$TRAVIS_BUILD_DIR/build.sh"
+    - "$TRAVIS_BUILD_DIR/test.sh"

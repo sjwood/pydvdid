@@ -17,7 +17,7 @@ function __echo_to_stderr() {
 PYTHON_PATH=$(which python)
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Python is not installed."
+    __echo_to_stderr "Python is not installed"
     exit 1
 fi
 
@@ -25,7 +25,7 @@ fi
 NOSE_PATH=$(which nosetests)
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Nose is not installed."
+    __echo_to_stderr "Nose is not installed"
     exit 1
 fi
 
@@ -33,7 +33,7 @@ fi
 COVERAGE_PATH=$(which coverage)
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Coverage is not installed."
+    __echo_to_stderr "Coverage is not installed"
     exit 1
 fi
 
@@ -41,7 +41,7 @@ fi
 SCRIPT_DIRECTORY=$(readlink -f "$(dirname "$0")")
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot determine where script is running from."
+    __echo_to_stderr "Cannot determine where script is running from"
     exit 1
 fi
 
@@ -49,11 +49,11 @@ fi
 cd $SCRIPT_DIRECTORY
 
 # find and execute tests
-nosetests tests --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70
+nosetests tests --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70 --cover-erase
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then
-    __echo_to_stderr "Nose returned exit code $EXIT_CODE."
+    __echo_to_stderr "Nose returned exit code $EXIT_CODE"
 fi
 
 # exit with appropriate code

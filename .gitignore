@@ -1,5 +1,8 @@
 # compiled files
 *.pyc
 
-# packaging
-pydvdid.egg-info/
+# packaging folders
+*.egg-info/
+
+# test coverage file
+.coverage

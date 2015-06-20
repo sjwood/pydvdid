@@ -17,7 +17,7 @@ function __echo_to_stderr() {
 PYTHON_PATH=$(which python)
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Python is not installed."
+    __echo_to_stderr "Python is not installed"
     exit 1
 fi
 
@@ -25,7 +25,7 @@ fi
 SCRIPT_DIRECTORY=$(readlink -f "$(dirname "$0")")
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot determine where script is running from."
+    __echo_to_stderr "Cannot determine where script is running from"
     exit 1
 fi
 
@@ -44,7 +44,7 @@ python -m compileall -f $SCRIPT_DIRECTORY/**/*.py
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then
-    __echo_to_stderr "Python compileall returned exit code $EXIT_CODE."
+    __echo_to_stderr "Python compileall returned exit code $EXIT_CODE"
 fi
 
 # reset globstar option (if it was not originally set)

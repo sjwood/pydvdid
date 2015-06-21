@@ -4,14 +4,11 @@ python:
     - "2.6"
     - "2.7"
     - "pypy"
-    - "3.2"
-    - "3.3"
-    - "3.4"
-    - "pypy3"
-    - "nightly"
-install:
-    - pip install coverage
-    - pip install coveralls
+#    - "3.2"
+#    - "3.3"
+#    - "3.4"
+#    - "pypy3"
+#    - "nightly"
 script:
     - "$TRAVIS_BUILD_DIR/build.sh"
     - "$TRAVIS_BUILD_DIR/test.sh"

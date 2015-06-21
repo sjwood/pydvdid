@@ -1,8 +1,12 @@
-language: python
+language:
+    - python
 python:
     - "2.7"
 install:
     - pip install coverage
+    - pip install coveralls
 script:
     - "$TRAVIS_BUILD_DIR/build.sh"
     - "$TRAVIS_BUILD_DIR/test.sh"
+after_success:
+    - coveralls

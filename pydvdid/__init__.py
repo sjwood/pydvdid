@@ -1,1 +1,1 @@
-from Crc64Result import Crc64Result
+from pydvdid.Crc64Result import Crc64Result

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from pydvdid import Crc64Result
+from pydvdid.Crc64Result import Crc64Result
 
 class TestCrc64Result(TestCase):
     def test___init__(self):

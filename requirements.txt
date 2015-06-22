@@ -2,4 +2,4 @@ coverage
 coveralls
 nose
 pylint
-setuptools
+

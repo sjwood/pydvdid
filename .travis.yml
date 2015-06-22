@@ -12,5 +12,6 @@ python:
 script:
     - "$TRAVIS_BUILD_DIR/build.sh"
     - "$TRAVIS_BUILD_DIR/test.sh"
+    - "$TRAVIS_BUILD_DIR/codeanalysis.sh"
 after_success:
     - coveralls

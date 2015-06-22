@@ -12,6 +12,6 @@ python:
 script:
     - "$TRAVIS_BUILD_DIR/build.sh"
     - "$TRAVIS_BUILD_DIR/test.sh"
-    - "$TRAVIS_BUILD_DIR/codeanalysis.sh"
+    - if [ "$TRAVIS_PYTHON_VERSION" != "2.6" ] && [ "$TRAVIS_PYTHON_VERSION" != "3.2" ]; then "$TRAVIS_BUILD_DIR/codeanalysis.sh"; fi
 after_success:
     - coveralls

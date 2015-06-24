@@ -1,8 +1,8 @@
-"""Module contains the Crc64Result class.
+"""Module contains the definition of the Crc64Result class.
 """
 
 class Crc64Result(object):
-    """Class represents the result of a 64-bit Cyclic Redundancy Check checksum.
+    """Defines a class that represents the result of a 64-bit Cyclic Redundancy Check checksum.
     """
 
     def __init__(self, crc):

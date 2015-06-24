@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from pydvdid.Crc64Result import Crc64Result
+from pydvdid import Crc64Result
 
 class TestCrc64Result(TestCase):
     """Defines a class that contains tests for the pydvdid.Crc64Result class.

@@ -49,7 +49,7 @@ fi
 cd $SCRIPT_DIRECTORY
 
 # find and execute tests
-nosetests tests --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70 --cover-erase
+nosetests --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70 --cover-erase
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then

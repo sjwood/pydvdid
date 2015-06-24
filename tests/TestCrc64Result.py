@@ -1,4 +1,4 @@
-"""Module contains the TestCrc64Result class.
+"""Module contains the definition for the TestCrc64Result class.
 """
 
 from unittest import TestCase
@@ -6,7 +6,7 @@ from unittest import TestCase
 from pydvdid.Crc64Result import Crc64Result
 
 class TestCrc64Result(TestCase):
-    """Class contains tests for the pydvdid.Crc64Result class.
+    """Defines a class that contains tests for the pydvdid.Crc64Result class.
     """
 
     def test___init__(self):

@@ -1,7 +1,6 @@
 [run]
 branch = True
-omit =
-    *mock*
+source = .
 
 [report]
 omit =

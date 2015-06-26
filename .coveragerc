@@ -7,3 +7,4 @@ omit =
     */pypy*/*
     */site-packages/nose/*
     */site-packages/mock*
+    */tests/*

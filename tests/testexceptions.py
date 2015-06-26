@@ -20,7 +20,7 @@ class TestExceptions(TestCase):
         with self.assertRaises(TypeError) as context_manager:
             PydvdidException("This should not work.")
 
-        message = context_manager.exception.message
+        message = str(context_manager.exception)
         self.assertEqual("PydvdidException may not be directly instantiated.", message)
 
 

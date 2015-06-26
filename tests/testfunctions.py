@@ -43,7 +43,7 @@ class TestFunctions(TestCase):
 
         mock_isdir.assert_called_once_with("DVD_PATH")
 
-        message = context_manager.exception.message
+        message = str(context_manager.exception)
         self.assertEqual("Path 'DVD_PATH' does not exist.", message)
 
 
@@ -77,5 +77,5 @@ class TestFunctions(TestCase):
 
         mock_isdir.assert_called_once_with("DVD_PATH/VIDEO_TS")
 
-        message = context_manager.exception.message
+        message = str(context_manager.exception)
         self.assertEqual("Path 'DVD_PATH/VIDEO_TS' does not exist.", message)

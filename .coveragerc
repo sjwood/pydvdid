@@ -4,4 +4,6 @@ branch = True
 [report]
 omit =
     */python?.?/*
+    */pypy*/*
     */site-packages/nose/*
+    */site-packages/mock*

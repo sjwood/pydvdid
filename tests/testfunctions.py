@@ -38,13 +38,16 @@ class TestFunctions(TestCase):
 
         mock_isdir.return_value = False
 
-        with self.assertRaises(DvdPathDoesNotExistException) as context_manager:
+        try:
             _check_dvd_path_exists("DVD_PATH")
+        except DvdPathDoesNotExistException as expected:
+            self.assertEqual("Path 'DVD_PATH' does not exist.", str(expected))
+        except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
+            self.fail("An unexpected {0} exception was raised.".format(type(unexpected).__name__))
+        else:
+            self.fail("An exception was expected but was not raised.")
 
         mock_isdir.assert_called_once_with("DVD_PATH")
-
-        message = str(context_manager.exception)
-        self.assertEqual("Path 'DVD_PATH' does not exist.", message)
 
 
     @patch("pydvdid.functions.isdir")
@@ -72,10 +75,13 @@ class TestFunctions(TestCase):
 
         mock_isdir.return_value = False
 
-        with self.assertRaises(VideoTsPathDoesNotExistException) as context_manager:
+        try:
             _check_video_ts_path_exists("DVD_PATH")
+        except VideoTsPathDoesNotExistException as expected:
+            self.assertEqual("Path 'DVD_PATH/VIDEO_TS' does not exist.", str(expected))
+        except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
+            self.fail("An unexpected {0} exception was raised.".format(type(unexpected).__name__))
+        else:
+            self.fail("An exception was expected but was not raised.")
 
         mock_isdir.assert_called_once_with("DVD_PATH/VIDEO_TS")
-
-        message = str(context_manager.exception)
-        self.assertEqual("Path 'DVD_PATH/VIDEO_TS' does not exist.", message)

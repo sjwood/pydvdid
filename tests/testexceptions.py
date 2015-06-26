@@ -17,11 +17,14 @@ class TestExceptions(TestCase):
         """Test that instantiation of PydvdidException raises an exception.
         """
 
-        with self.assertRaises(TypeError) as context_manager:
+        try:
             PydvdidException("This should not work.")
-
-        message = str(context_manager.exception)
-        self.assertEqual("PydvdidException may not be directly instantiated.", message)
+        except TypeError as expected:
+            self.assertEqual("PydvdidException may not be directly instantiated.", str(expected))
+        except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
+            self.fail("An unexpected {0} exception was raised.".format(type(unexpected).__name__))
+        else:
+            self.fail("An exception was expected but was not raised.")
 
 
     def test_all_package_defined_exceptions_derive_from_pydvdidexception(self): # pylint: disable=locally-disabled, invalid-name

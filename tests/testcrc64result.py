@@ -1,36 +1,44 @@
-"""Module contains the definition for the TestCrc64Result class.
+"""Implements the TestCrc64Result class.
 """
 
-from unittest import TestCase
 
+from __future__ import absolute_import
+from unittest import TestCase
 from pydvdid import Crc64Result
 
+
 class TestCrc64Result(TestCase):
-    """Defines a class that contains tests for the pydvdid.Crc64Result class.
+    """Implements a class that contains tests for the pydvdid.crc64result module.
     """
 
     def test___init__(self):
         """Test that initialisation sets the 'private' __crc member to that of the argument
         (accesses member through name mangling).
         """
+
         result = Crc64Result(2246800662182009355)
-        # pylint: disable=locally-disabled, no-member, protected-access
-        self.assertEqual(result._Crc64Result__crc, 2246800662182009355)
+        self.assertEqual(2246800662182009355, result._Crc64Result__crc) # pylint: disable=locally-disabled, no-member, protected-access
+
 
     def test_high_bytes(self):
-        """Test that invokation returns the topmost 4 bytes, formatted as a lowercase hex string.
+        """Test that invocation returns the topmost 4 bytes, formatted as a lowercase hex string.
         """
+
         result = Crc64Result(2246800662182009355)
-        self.assertEqual(result.high_bytes, "1f2e3d4c")
+        self.assertEqual("1f2e3d4c", result.high_bytes)
+
 
     def test_low_bytes(self):
-        """Test that invokation returns the bottommost 4 bytes, formatted as a lowercase hex string.
+        """Test that invocation returns the bottommost 4 bytes, formatted as a lowercase hex string.
         """
+
         result = Crc64Result(2246800662182009355)
-        self.assertEqual(result.low_bytes, "56789a0b")
+        self.assertEqual("56789a0b", result.low_bytes)
+
 
     def test___str__(self):
-        """Test that invokation returns the the full crc, formated as a lowercase hex string.
+        """Test that invocation returns the the full crc, formated as a lowercase hex string.
         """
+
         result = Crc64Result(2246800662182009355)
-        self.assertEqual(result.__str__(), "1f2e3d4c56789a0b")
+        self.assertEqual("1f2e3d4c56789a0b", result.__str__())

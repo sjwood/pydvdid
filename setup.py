@@ -1,7 +1,9 @@
 """Module contains the pydvdid package definition.
 """
 
+
 from setuptools import setup
+
 
 setup(
     name="pydvdid",

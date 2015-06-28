@@ -3,6 +3,7 @@
 
 
 from __future__ import absolute_import
+from __future__ import print_function
 from glob import glob
 from os.path import isdir, join
 from .crc64calculator import _Crc64Calculator
@@ -24,7 +25,7 @@ def compute(dvd_path):
     calculator = _Crc64Calculator(0x92c64265d32139a4)
 
     for video_ts_file_path in _get_video_ts_file_paths(dvd_path):
-        print video_ts_file_path
+        print(video_ts_file_path)
 
     return calculator.crc64
 

@@ -14,8 +14,8 @@ class _Crc64Calculator(object):
     """
 
     def __init__(self, polynomial, initial_xor=0xffffffffffffffff):
-        self.__construct_lookup_table(polynomial)
-        self.__crc64 = initial_xor
+        self._construct_lookup_table(polynomial)
+        self._crc64 = initial_xor
 
 
     @property
@@ -23,7 +23,7 @@ class _Crc64Calculator(object):
         """Returns the current CRC-64.
         """
 
-        return Crc64Result(self.__crc64)
+        return Crc64Result(self._crc64)
 
 
     def update(self, content):
@@ -32,25 +32,24 @@ class _Crc64Calculator(object):
         """
 
         for byte in content:
-            lookup_table_index = (self.__crc64 & 0xff) ^ ord(byte)
-            self.__crc64 = (self.__crc64 >> 8) ^ self.__lookup_table[lookup_table_index]
+            self._crc64 = (self._crc64 >> 8) ^ self._lookup_table[(self._crc64 & 0xff) ^ ord(byte)]
 
 
-    def __construct_lookup_table(self, polynomial):
+    def _construct_lookup_table(self, polynomial):
         """Precomputes a CRC-64 lookup table seeded from the supplied polynomial.
            No return value.
         """
 
-        self.__lookup_table = []
+        self._lookup_table = []
 
         for i in range(0, 256):
             lookup_value = i
 
             for _ in range(0, 8):
-                if lookup_value & 0x1 == 1:
+                if lookup_value & 0x1 == 0x1:
                     lookup_value = (lookup_value >> 1) ^ polynomial
 
                 else:
                     lookup_value = lookup_value >> 1
 
-            self.__lookup_table.append(lookup_value)
+            self._lookup_table.append(lookup_value)

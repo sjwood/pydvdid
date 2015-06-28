@@ -13,75 +13,73 @@ class TestCrc64Calculator(TestCase):
     """Implements a class that contains tests for the pydvdid.crc64calculator module.
     """
 
-    @patch("pydvdid.crc64calculator._Crc64Calculator._Crc64Calculator__construct_lookup_table")
+    @patch("pydvdid.crc64calculator._Crc64Calculator._construct_lookup_table")
     def test__crc64calculator___init___with_default_initial_xor_sets_private_variables(self, mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name, line-too-long
         """Test that initialisation of a _Crc64Calculator instance calls a 'private' function to
            precompute a CRC lookup table from the supplied polynomial, and also sets the 'private'
-           __crc64 member to the default initial_xor (accesses members through name mangling).
+           __crc64 member to the default initial_xor.
         """
 
         calculator = _Crc64Calculator(0x1234)
 
         mock_construct_lookup_table.assert_called_once_with(0x1234)
 
-        self.assertEqual(0xffffffffffffffff, calculator._Crc64Calculator__crc64) # pylint: disable=locally-disabled, protected-access
+        self.assertEqual(0xffffffffffffffff, calculator._crc64) # pylint: disable=locally-disabled, protected-access
 
 
-    @patch("pydvdid.crc64calculator._Crc64Calculator._Crc64Calculator__construct_lookup_table")
+    @patch("pydvdid.crc64calculator._Crc64Calculator._construct_lookup_table")
     def test__crc64calculator___init___with_supplied_initial_xor_sets_private_variables(self, mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name, line-too-long
         """Test that initialisation of a _Crc64Calculator instance calls a 'private' function to
            precompute a CRC lookup table from the supplied polynomial, and also sets the 'private'
-           __crc64 member to the supplied initial_xor (accesses members through name mangling).
+           __crc64 member to the supplied initial_xor.
         """
 
         calculator = _Crc64Calculator(0x5678, 0xaaaaaaaa)
 
         mock_construct_lookup_table.assert_called_once_with(0x5678)
 
-        self.assertEqual(0xaaaaaaaa, calculator._Crc64Calculator__crc64) # pylint: disable=locally-disabled, protected-access
+        self.assertEqual(0xaaaaaaaa, calculator._crc64) # pylint: disable=locally-disabled, protected-access
 
 
     @patch("pydvdid.crc64calculator._Crc64Calculator.__init__", Mock(return_value=None))
     def test__crc64calculator__crc64_returns_correct_value(self): # pylint: disable=locally-disabled, invalid-name
-        """Test that invocation of crc64 returns the correct CRC-64 as a Crc64Result object
-           (accesses members through name mangling).
+        """Test that invocation of crc64 returns the correct CRC-64 as a Crc64Result object.
         """
 
         calculator = _Crc64Calculator(0xfedc)
 
-        calculator._Crc64Calculator__crc64 = 0x0123456789abcdef # pylint: disable=locally-disabled, protected-access
+        calculator._crc64 = 0x0123456789abcdef # pylint: disable=locally-disabled, protected-access
 
         self.assertEqual(Crc64Result(0x0123456789abcdef), calculator.crc64)
 
 
     @patch("pydvdid.crc64calculator._Crc64Calculator.__init__", Mock(return_value=None))
-    def test__crc64calculator_update_correctly_updates_the___crc64_attribute(self): # pylint: disable=locally-disabled, invalid-name
-        """Test that invocation of update() correctly updates the CRC-64 (accesses members through
-           name mangling).
+    def test__crc64calculator_update_correctly_updates_the__crc64_attribute(self): # pylint: disable=locally-disabled, invalid-name
+        """Test that invocation of update() correctly updates the CRC-64.
         """
 
         calculator = _Crc64Calculator(0x0)
 
-        calculator._Crc64Calculator__crc64 = 0xffffffffffffffff # pylint: disable=locally-disabled, protected-access
+        calculator._crc64 = 0xffffffffffffffff # pylint: disable=locally-disabled, protected-access
 
-        calculator._Crc64Calculator__lookup_table = [0xffffffffffffffff] # pylint: disable=locally-disabled, protected-access
+        calculator._lookup_table = [0xffffffffffffffff] # pylint: disable=locally-disabled, protected-access
 
         calculator.update(str(chr(0xff)))
 
-        self.assertEqual(0xff00000000000000, calculator._Crc64Calculator__crc64) # pylint: disable=locally-disabled, protected-access
+        self.assertEqual(0xff00000000000000, calculator._crc64) # pylint: disable=locally-disabled, protected-access
 
 
     @patch("pydvdid.crc64calculator._Crc64Calculator.__init__", Mock(return_value=None))
-    def test__crc64calculator___construct_lookup_table_correctly_constructs_the___lookup_table_attribute(self): # pylint: disable=locally-disabled, invalid-name, line-too-long
-        """Test that invocation of __construct_lookup_table() correctly computes the 'private'
-           CRC-64 lookup table (accesses members through name mangling).
+    def test__crc64calculator__construct_lookup_table_correctly_constructs_the__lookup_table_attribute(self): # pylint: disable=locally-disabled, invalid-name, line-too-long
+        """Test that invocation of _construct_lookup_table() correctly computes the 'private'
+           CRC-64 lookup table.
         """
 
         calculator = _Crc64Calculator(0)
 
-        calculator._Crc64Calculator__crc64 = 0xffffffffffffffff # pylint: disable=locally-disabled, protected-access
+        calculator._crc64 = 0xffffffffffffffff # pylint: disable=locally-disabled, protected-access
 
-        calculator._Crc64Calculator__construct_lookup_table(0x92c64265d32139a4) # pylint: disable=locally-disabled, no-member, protected-access
+        calculator._construct_lookup_table(0x92c64265d32139a4) # pylint: disable=locally-disabled, protected-access
 
         # precomputed lookup table for polynomial used in GetDiscID method is taken from the dvdid
         # project crc64_table.c file (http://dvdid.cjkey.org.uk/)
@@ -152,4 +150,4 @@ class TestCrc64Calculator(TestCase):
             0x1fe29e79c9cf3d63, 0x17eb76db5f5b6c8a, 0x0ff14f3ce4e79eb1, 0x07f8a79e7273cf58
         ]
 
-        self.assertEqual(expected_lookup_table, calculator._Crc64Calculator__lookup_table) # pylint: disable=locally-disabled, protected-access
+        self.assertEqual(expected_lookup_table, calculator._lookup_table) # pylint: disable=locally-disabled, protected-access

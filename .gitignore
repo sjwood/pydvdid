@@ -4,5 +4,6 @@
 # packaging folders
 *.egg-info/
 
-# test coverage file
+# test coverage files
 .coverage
+cover/

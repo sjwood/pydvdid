@@ -58,5 +58,16 @@ then
     fi
 fi
 
+# delete the coverage report
+if [ -d "$SCRIPT_DIRECTORY/cover" ]
+then
+    rm --recursive --force "$SCRIPT_DIRECTORY/cover"
+    if [ $? -ne 0 ]
+    then
+        __echo_to_stderr "Cannot delete coverage report folder cover"
+        exit 1
+    fi
+fi
+
 # exit with appropriate code
 exit 0

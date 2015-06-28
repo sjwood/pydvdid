@@ -5,8 +5,8 @@
 from __future__ import absolute_import
 from mock import Mock, patch
 from unittest import TestCase
-from pydvdid import Crc64Result
 from pydvdid.crc64calculator import _Crc64Calculator
+from pydvdid.crc64result import Crc64Result
 
 
 class TestCrc64Calculator(TestCase):

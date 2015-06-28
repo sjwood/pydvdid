@@ -4,7 +4,7 @@
 
 from __future__ import absolute_import
 from unittest import TestCase
-from pydvdid import Crc64Result
+from pydvdid.crc64result import Crc64Result
 
 
 class TestCrc64Result(TestCase):
@@ -46,7 +46,7 @@ class TestCrc64Result(TestCase):
         first = Crc64Result(7549347567549)
         second = Crc64Result(7549347567549)
 
-        self.assertTrue(first == second)
+        self.assertEqual(first == second, True)
 
 
     def test_crc64result___eq___returns_False_when_instances_are_not_equal(self): # pylint: disable=locally-disabled, invalid-name
@@ -57,7 +57,7 @@ class TestCrc64Result(TestCase):
         first = Crc64Result(93005)
         second = Crc64Result(22050968374385)
 
-        self.assertFalse(first == second)
+        self.assertEqual(first == second, False)
 
 
     def test_crc64result___ne___returns_False_when_instances_are_equal(self): # pylint: disable=locally-disabled, invalid-name
@@ -68,7 +68,7 @@ class TestCrc64Result(TestCase):
         first = Crc64Result(12)
         second = Crc64Result(12)
 
-        self.assertFalse(first != second)
+        self.assertEqual(first != second, False)
 
 
     def test_crc64result___ne___returns_True_when_instances_are_not_equal(self): # pylint: disable=locally-disabled, invalid-name
@@ -79,7 +79,7 @@ class TestCrc64Result(TestCase):
         first = Crc64Result(848485484364545884)
         second = Crc64Result(66307593)
 
-        self.assertTrue(first != second)
+        self.assertEqual(first != second, True)
 
 
     def test_crc64result___str___returns_correct_value(self): # pylint: disable=locally-disabled, invalid-name

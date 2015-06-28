@@ -7,7 +7,6 @@ class Crc64Result(object):
     """
 
     def __init__(self, crc):
-
         self.__crc = crc
 
 
@@ -27,6 +26,13 @@ class Crc64Result(object):
         return format(self.__crc & 0xffffffff, "08x")
 
 
-    def __str__(self):
+    def __eq__(self, other):
+        return self.__crc == other._Crc64Result__crc # pylint: disable=locally-disabled, protected-access
 
+
+    def __ne__(self, other):
+        return not self == other
+
+
+    def __str__(self):
         return format(self.__crc, "016x")

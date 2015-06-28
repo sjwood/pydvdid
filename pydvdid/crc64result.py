@@ -6,8 +6,8 @@ class Crc64Result(object):
     """Implements a class that represents the result of a 64-bit Cyclic Redundancy Check checksum.
     """
 
-    def __init__(self, crc):
-        self.__crc = crc
+    def __init__(self, crc64):
+        self._crc64 = crc64
 
 
     @property
@@ -15,7 +15,7 @@ class Crc64Result(object):
         """Returns the topmost 4 bytes of the checksum formatted as a lowercase hex string.
         """
 
-        return format(self.__crc >> 32, "08x")
+        return format(self._crc64 >> 32, "08x")
 
 
     @property
@@ -23,11 +23,11 @@ class Crc64Result(object):
         """Returns the bottommost 4 bytes of the checksum formatted as a lowercase hex string.
         """
 
-        return format(self.__crc & 0xffffffff, "08x")
+        return format(self._crc64 & 0xffffffff, "08x")
 
 
     def __eq__(self, other):
-        return self.__crc == other._Crc64Result__crc # pylint: disable=locally-disabled, protected-access
+        return self._crc64 == other._crc64 # pylint: disable=locally-disabled, protected-access
 
 
     def __ne__(self, other):
@@ -35,4 +35,4 @@ class Crc64Result(object):
 
 
     def __str__(self):
-        return format(self.__crc, "016x")
+        return format(self._crc64, "016x")

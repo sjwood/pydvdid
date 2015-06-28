@@ -65,8 +65,8 @@ class TestCrc64Result(TestCase):
            __crc64 values.
         """
 
-        first = Crc64Result(7549347567549)
-        second = Crc64Result(7549347567549)
+        first = Crc64Result(12)
+        second = Crc64Result(12)
 
         self.assertFalse(first != second)
 
@@ -76,8 +76,8 @@ class TestCrc64Result(TestCase):
            __crc64 values.
         """
 
-        first = Crc64Result(93005)
-        second = Crc64Result(22050968374385)
+        first = Crc64Result(848485484364545884)
+        second = Crc64Result(66307593)
 
         self.assertTrue(first != second)
 

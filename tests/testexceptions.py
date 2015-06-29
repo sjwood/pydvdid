@@ -4,8 +4,13 @@
 
 from __future__ import absolute_import
 from inspect import getmembers, isclass
+from mock import patch
 from nose.tools import eq_, istest, nottest, ok_
-from pydvdid import PydvdidException
+from pydvdid import (
+    DvdPathDoesNotExistException,
+    PydvdidException,
+    VideoTsPathDoesNotExistException
+)
 import pydvdid
 
 
@@ -22,6 +27,34 @@ def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, 
         ok_(False, "An unexpected {0} exception was raised.".format(type(unexpected).__name__))
     else:
         ok_(False, "An exception was expected but was not raised.")
+
+
+@istest
+@patch("pydvdid.exceptions.PydvdidException.__init__")
+def dvdpathdoesnotexistexception___init__calls_base___init___with_correctly_formatted_message(mock_init): # pylint: disable=locally-disabled, invalid-name, line-too-long
+    """Test that instantiation of DvdPathDoesNotExistException instantiates the base class with a
+       formatted message.
+    """
+
+    mock_init.return_value = None
+
+    DvdPathDoesNotExistException("DVD_PATH")
+
+    mock_init.assert_called_once_with("Path 'DVD_PATH' does not exist.")
+
+
+@istest
+@patch("pydvdid.exceptions.PydvdidException.__init__")
+def videotspathdoesnotexistexception___init__calls_base___init___with_correctly_formatted_message(mock_init): # pylint: disable=locally-disabled, invalid-name, line-too-long
+    """Test that instantiation of VideoTsPathDoesNotExistException instantiates the base class with
+       a formatted message.
+    """
+
+    mock_init.return_value = None
+
+    VideoTsPathDoesNotExistException("DVD_PATH/VIDEO_TS")
+
+    mock_init.assert_called_once_with("Path 'DVD_PATH/VIDEO_TS' does not exist.")
 
 
 @istest

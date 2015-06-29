@@ -19,7 +19,9 @@ class DvdPathDoesNotExistException(PydvdidException):
     """Implements a class that represents the exception raised when a DVD path does not exist.
     """
 
-    pass
+    def __init__(self, dvd_path):
+        template = "Path '{0}' does not exist."
+        super(DvdPathDoesNotExistException, self).__init__(template.format(dvd_path))
 
 
 class VideoTsPathDoesNotExistException(PydvdidException):
@@ -27,4 +29,6 @@ class VideoTsPathDoesNotExistException(PydvdidException):
        VIDEO_TS folder.
     """
 
-    pass
+    def __init__(self, video_ts_path):
+        template = "Path '{0}' does not exist."
+        super(VideoTsPathDoesNotExistException, self).__init__(template.format(video_ts_path))

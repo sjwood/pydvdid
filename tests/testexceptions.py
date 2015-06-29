@@ -1,52 +1,50 @@
-"""Implements the TestExceptions class.
+"""Implements tests for the pydvdid.exceptions module.
 """
 
 
 from __future__ import absolute_import
 from inspect import getmembers, isclass
-from unittest import TestCase
+from nose.tools import eq_, istest, nottest, ok_
 from pydvdid import PydvdidException
 import pydvdid
 
 
-class TestExceptions(TestCase):
-    """Implements a class that contains tests for the pydvdid.exceptions module.
+@istest
+def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, invalid-name
+    """Test that instantiation of PydvdidException raises an exception.
     """
 
-    def test_pydvdidexception_is_not_instantiable(self): # pylint: disable=locally-disabled, invalid-name
-        """Test that instantiation of PydvdidException raises an exception.
-        """
-
-        try:
-            PydvdidException("This should not work.")
-        except TypeError as expected:
-            self.assertEqual("PydvdidException may not be directly instantiated.", str(expected))
-        except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
-            self.fail("An unexpected {0} exception was raised.".format(type(unexpected).__name__))
-        else:
-            self.fail("An exception was expected but was not raised.")
+    try:
+        PydvdidException("This should not work.")
+    except TypeError as expected:
+        eq_("PydvdidException may not be directly instantiated.", str(expected))
+    except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
+        ok_(False, "An unexpected {0} exception was raised.".format(type(unexpected).__name__))
+    else:
+        ok_(False, "An exception was expected but was not raised.")
 
 
-    def test_all_package_defined_exceptions_derive_from_pydvdidexception(self): # pylint: disable=locally-disabled, invalid-name
-        """Test that all directly raisable exceptions defined in the pydvdid package (i.e. all
-           except PydvdidException) are subclassed from PydvdidException.
-        """
+@istest
+def all_package_defined_exceptions_derive_from_pydvdidexception(): # pylint: disable=locally-disabled, invalid-name
+    """Test that all directly raisable exceptions defined in the pydvdid package (i.e. all except
+       PydvdidException) are subclassed from PydvdidException.
 
-        # discover (by inspection) all raisable exceptions defined in the pydvdid package
-        all_members = [t[1] for t in getmembers(pydvdid)]
-        all_exceptions = [m for m in all_members if isclass(m) and issubclass(m, Exception)]
-        raisable_exceptions = [e for e in all_exceptions if e != PydvdidException]
+       (This is a Nose generator test which discovers exceptions by inspection to ensure that all
+       package defined exceptions are tested).
+    """
 
-        incorrectly_defined_exceptions = []
+    for member_tuple in getmembers(pydvdid):
+        member = member_tuple[1]
 
-        for raisable_exception in raisable_exceptions:
-            if not issubclass(raisable_exception, PydvdidException):
-                incorrectly_defined_exceptions.append(raisable_exception.__name__)
+        if isclass(member) and issubclass(member, Exception) and member != PydvdidException:
+            yield _assert_exception_type_is_subclass_of_pydvdidexception, member
 
-        if len(incorrectly_defined_exceptions) > 0:
-            template = "Exception{0} {1} {2} not subclassed from PydvdidException."
-            plural_or_singular = "s" if len(incorrectly_defined_exceptions) > 1 else ""
-            exceptions_string = ", ".join(incorrectly_defined_exceptions)
-            are_or_is = "are" if len(incorrectly_defined_exceptions) > 1 else "is"
-            message = template.format(plural_or_singular, exceptions_string, are_or_is)
-            self.fail(message)
+
+@nottest
+def _assert_exception_type_is_subclass_of_pydvdidexception(exception_type): # pylint: disable=locally-disabled, invalid-name
+    """Asserts that supplied exception type is a subclass of PydvdidException.
+    """
+
+    assert_message = "{0} is not subclassed from PydvdidException.".format(exception_type.__name__)
+
+    ok_(not issubclass(type, PydvdidException), assert_message)

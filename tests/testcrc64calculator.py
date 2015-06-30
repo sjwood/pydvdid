@@ -11,8 +11,8 @@ from pydvdid.crc64result import Crc64Result
 
 @istest
 @patch("pydvdid.crc64calculator._Crc64Calculator._construct_lookup_table")
-def crc64calculator___init___with_default_initial_xor_sets_private_variables(mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name, line-too-long
-    """Test that initialisation of a _Crc64Calculator instance calls a 'private' function to
+def crc64calculator___init___with_default_initial_xor_sets_attributes(mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name
+    """Tests that initialisation of a _Crc64Calculator instance calls a 'private' function to
        precompute a CRC lookup table from the supplied polynomial, and also sets the 'private'
        _crc64 member to the default initial_xor.
     """
@@ -26,8 +26,8 @@ def crc64calculator___init___with_default_initial_xor_sets_private_variables(moc
 
 @istest
 @patch("pydvdid.crc64calculator._Crc64Calculator._construct_lookup_table")
-def crc64calculator___init___with_supplied_initial_xor_sets_private_variables(mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name, line-too-long
-    """Test that initialisation of a _Crc64Calculator instance calls a 'private' function to
+def crc64calculator___init___with_supplied_initial_xor_sets_attributes(mock_construct_lookup_table): # pylint: disable=locally-disabled, invalid-name
+    """Tests that initialisation of a _Crc64Calculator instance calls a 'private' function to
        precompute a CRC lookup table from the supplied polynomial, and also sets the 'private'
        _crc64 member to the supplied initial_xor.
     """
@@ -42,7 +42,7 @@ def crc64calculator___init___with_supplied_initial_xor_sets_private_variables(mo
 @istest
 @patch("pydvdid.crc64calculator._Crc64Calculator.__init__")
 def crc64calculator__crc64_returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of crc64 returns the correct CRC-64 as a Crc64Result object.
+    """Tests that invocation of crc64 returns the correct CRC-64 as a Crc64Result object.
     """
 
     mock_init.return_value = None
@@ -58,7 +58,7 @@ def crc64calculator__crc64_returns_correct_value(mock_init): # pylint: disable=l
 @istest
 @patch("pydvdid.crc64calculator._Crc64Calculator.__init__")
 def crc64calculator_update_correctly_updates_the__crc64_attribute(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of update() correctly updates the CRC-64.
+    """Tests that invocation of update() correctly updates the CRC-64.
     """
 
     mock_init.return_value = None
@@ -75,8 +75,8 @@ def crc64calculator_update_correctly_updates_the__crc64_attribute(mock_init): # 
 
 @istest
 @patch("pydvdid.crc64calculator._Crc64Calculator.__init__")
-def crc64calculator__construct_lookup_table_correctly_constructs_the__lookup_table_attribute(mock_init): # pylint: disable=locally-disabled, invalid-name, line-too-long
-    """Test that invocation of _construct_lookup_table() correctly computes the 'private'
+def crc64calculator__construct_lookup_table_correctly_builds__lookup_table_attribute(mock_init): # pylint: disable=locally-disabled, invalid-name
+    """Tests that invocation of _construct_lookup_table() correctly computes the 'private'
        CRC-64 lookup table.
     """
 

@@ -2,4 +2,5 @@ coverage
 coveralls
 mock
 nose
+nose-parameterized
 pylint

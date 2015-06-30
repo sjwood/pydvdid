@@ -16,7 +16,7 @@ import pydvdid
 
 @istest
 def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, invalid-name
-    """Test that instantiation of PydvdidException raises an exception.
+    """Tests that instantiation of PydvdidException raises an exception.
     """
 
     try:
@@ -31,8 +31,8 @@ def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, 
 
 @istest
 @patch("pydvdid.exceptions.PydvdidException.__init__")
-def dvdpathdoesnotexistexception___init__calls_base___init___with_correctly_formatted_message(mock_init): # pylint: disable=locally-disabled, invalid-name, line-too-long
-    """Test that instantiation of DvdPathDoesNotExistException instantiates the base class with a
+def dvdpathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
+    """Tests that instantiation of DvdPathDoesNotExistException instantiates the base class with a
        formatted message.
     """
 
@@ -45,8 +45,8 @@ def dvdpathdoesnotexistexception___init__calls_base___init___with_correctly_form
 
 @istest
 @patch("pydvdid.exceptions.PydvdidException.__init__")
-def videotspathdoesnotexistexception___init__calls_base___init___with_correctly_formatted_message(mock_init): # pylint: disable=locally-disabled, invalid-name, line-too-long
-    """Test that instantiation of VideoTsPathDoesNotExistException instantiates the base class with
+def videotspathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
+    """Tests that instantiation of VideoTsPathDoesNotExistException instantiates the base class with
        a formatted message.
     """
 
@@ -59,7 +59,7 @@ def videotspathdoesnotexistexception___init__calls_base___init___with_correctly_
 
 @istest
 def all_package_defined_exceptions_derive_from_pydvdidexception(): # pylint: disable=locally-disabled, invalid-name
-    """Test that all directly raisable exceptions defined in the pydvdid package (i.e. all except
+    """Tests that all directly raisable exceptions defined in the pydvdid package (i.e. all except
        PydvdidException) are subclassed from PydvdidException.
 
        (This is a Nose generator test which discovers exceptions by inspection to ensure that all

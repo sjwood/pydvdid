@@ -3,14 +3,16 @@
 
 
 from __future__ import absolute_import
+from sys import modules
 from mock import call, patch
-from nose.tools import eq_, istest
+from nose_parameterized import parameterized, param
+from nose.tools import eq_, istest, nottest
 from pydvdid.crc64result import Crc64Result
 
 
 @istest
 def crc64result___init___sets_private_variables(): # pylint: disable=locally-disabled, invalid-name
-    """Test that initialisation of a Crc64Result instance sets the 'private' _crc64 member to that
+    """Tests that initialisation of a Crc64Result instance sets the 'private' _crc64 member to that
        of the argument.
     """
 
@@ -22,7 +24,7 @@ def crc64result___init___sets_private_variables(): # pylint: disable=locally-dis
 @istest
 @patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result_high_bytes_returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of high_bytes returns the topmost 4 bytes of _crc64, formatted as a
+    """Tests that invocation of high_bytes returns the topmost 4 bytes of _crc64, formatted as a
        lowercase hex string.
     """
 
@@ -39,7 +41,7 @@ def crc64result_high_bytes_returns_correct_value(mock_init): # pylint: disable=l
 @istest
 @patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of low_bytes returns the bottommost 4 bytes of _crc64, formatted as a
+    """Tests that invocation of low_bytes returns the bottommost 4 bytes of _crc64, formatted as a
        lowercase hex string.
     """
 
@@ -54,83 +56,76 @@ def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=lo
 
 
 @istest
-@patch("pydvdid.crc64result.Crc64Result.__init__")
-def crc64result___eq___returns_True_when_instances_are_equal(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of == returns True when two instances of Crc64Result have the same
-       _crc64 value.
+@parameterized([
+    param("a == b is True", 1, 1001, 2, 1001, "_equality_comparison", True),
+    param("a == b is False", 4, 2001, 4, 4001, "_equality_comparison", False),
+    param("a != b is False", 8, 8001, 16, 8001, "_inequality_comparison", False),
+    param("a != b is True", 32, 16001, 32, 32001, "_inequality_comparison", True)
+])
+@patch("pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
+def crc64result_equality_and_inequality_comparisons_return_correctly(description, polynomial_one,
+                                                                     crc64_one, polynomial_two,
+                                                                     crc64_two,
+                                                                     comparison_function_name,
+                                                                     expectation, mock_init):
+    """Tests that invocation of == and != equality comparisons return correctly.
+
+       (This is a Nose generator test which receives a set of data provided by nose-parameterized).
     """
 
     mock_init.return_value = None
 
-    first = Crc64Result(0x2944)
-    first._crc64 = 7549347567549 # pylint: disable=locally-disabled, protected-access
-    second = Crc64Result(0xcc10)
-    second._crc64 = 7549347567549 # pylint: disable=locally-disabled, protected-access
+    # nose-parameterized can only pass through primitives, so get function from name string
+    comparison_function = _get_module_function(comparison_function_name)
 
-    eq_(first == second, True)
+    result_one = Crc64Result(polynomial_one)
+    result_one._crc64 = crc64_one # pylint: disable=locally-disabled, protected-access
 
-    mock_init.assert_has_calls([call(0x2944), call(0xcc10)])
+    result_two = Crc64Result(polynomial_two)
+    result_two._crc64 = crc64_two # pylint: disable=locally-disabled, protected-access
+
+    comparison_value = comparison_function(result_one, result_two)
+    assert_message = "Unexpected result '{0}' for test '{1}'".format(comparison_value, description)
+    eq_(expectation, comparison_value, assert_message)
+
+    mock_init.assert_has_calls([
+        call(polynomial_one),
+        call(polynomial_two)
+    ])
 
 
-@istest
-@patch("pydvdid.crc64result.Crc64Result.__init__")
-def crc64result___eq___returns_False_when_instances_are_not_equal(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of == returns False when two instances of Crc64Result have different
-       _crc64 values.
+@nottest
+def _get_module_function(function_name):
+    """Returns a function from the current module whose name matches the supplied function name, or
+       raises a ValueError.
     """
 
-    mock_init.return_value = None
+    if not hasattr(modules[__name__], function_name):
+        raise ValueError("Function {0} does not exist".format(function_name))
 
-    first = Crc64Result(0x1d)
-    first._crc64 = 93005 # pylint: disable=locally-disabled, protected-access
-    second = Crc64Result(0x1d)
-    second._crc64 = 22050968374385 # pylint: disable=locally-disabled, protected-access
-
-    eq_(first == second, False)
-
-    mock_init.assert_has_calls([call(0x1d), call(0x1d)])
+    return getattr(modules[__name__], function_name)
 
 
-@istest
-@patch("pydvdid.crc64result.Crc64Result.__init__")
-def crc64result___ne___returns_False_when_instances_are_equal(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of != returns False when two instances of Crc64Result have the same
-       _crc64 values.
+@nottest
+def _equality_comparison(first, second):
+    """Performs a simple == equality comparison.
     """
 
-    mock_init.return_value = None
-
-    first = Crc64Result(0x4410)
-    first._crc64 = 12 # pylint: disable=locally-disabled, protected-access
-    second = Crc64Result(0xba11)
-    second._crc64 = 12 # pylint: disable=locally-disabled, protected-access
-
-    eq_(first != second, False)
-
-    mock_init.assert_has_calls([call(0x4410), call(0xba11)])
+    return first == second
 
 
-@istest
-@patch("pydvdid.crc64result.Crc64Result.__init__")
-def crc64result___ne___returns_True_when_instances_are_not_equal(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of != returns True when two instances of Crc64Result have different
-       _crc64 values.
+@nottest
+def _inequality_comparison(first, second):
+    """Performs a simple != inequality comparison.
     """
 
-    mock_init.return_value = None
-
-    first = Crc64Result(0)
-    first._crc64 = 848485484364545884 # pylint: disable=locally-disabled, protected-access
-    second = Crc64Result(0)
-    second._crc64 = 66307593 # pylint: disable=locally-disabled, protected-access
-
-    eq_(first != second, True)
+    return first != second
 
 
 @istest
 @patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result___str___returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation of str() returns the the full _crc64 value, formated as a lowercase hex
+    """Tests that invocation of str() returns the the full _crc64 value, formated as a lowercase hex
        string.
     """
 

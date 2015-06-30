@@ -12,7 +12,8 @@ from pydvdid.functions import _check_dvd_path_exists, _check_video_ts_path_exist
 @istest
 @patch("pydvdid.functions.isdir")
 def _check_dvd_path_exists_does_not_raise_exception_when_path_exists(mock_isdir): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation with a valid path does not throw an exception.
+    """Tests that invocation of _check_dvd_path_exists() with a valid path does not throw an
+       exception.
     """
 
     mock_isdir.return_value = True
@@ -28,7 +29,8 @@ def _check_dvd_path_exists_does_not_raise_exception_when_path_exists(mock_isdir)
 @istest
 @patch("pydvdid.functions.isdir")
 def _check_dvd_path_exists_raises_exception_when_path_does_not_exist(mock_isdir): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation with an invalid path throws a DvdPathDoesNotExistException exception.
+    """Tests that invocation of _check_dvd_path_exists() with an invalid path throws a
+       DvdPathDoesNotExistException exception.
     """
 
     mock_isdir.return_value = False
@@ -48,7 +50,8 @@ def _check_dvd_path_exists_raises_exception_when_path_does_not_exist(mock_isdir)
 @istest
 @patch("pydvdid.functions.isdir")
 def _check_video_ts_path_exists_does_not_raise_exception_when_path_exists(mock_isdir): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation with a valid path does not throw an exception.
+    """Tests that invocation of _check_video_ts_path_exists() with a valid path does not throw an
+       exception.
     """
 
     mock_isdir.return_value = True
@@ -64,8 +67,8 @@ def _check_video_ts_path_exists_does_not_raise_exception_when_path_exists(mock_i
 @istest
 @patch("pydvdid.functions.isdir")
 def _check_video_ts_path_exists_does_raise_exception_when_path_does_not_exist(mock_isdir): # pylint: disable=locally-disabled, invalid-name
-    """Test that invocation with an invalid path throws a VideoTsPathDoesNotExistException
-       exception.
+    """Tests that invocation of _check_video_ts_path_exists() with an invalid path throws a
+       VideoTsPathDoesNotExistException exception.
     """
 
     mock_isdir.return_value = False

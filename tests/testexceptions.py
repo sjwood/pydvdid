@@ -7,9 +7,9 @@ from inspect import getmembers, isclass
 from mock import patch
 from nose.tools import eq_, istest, nottest, ok_
 from pydvdid import (
-    DvdPathDoesNotExistException,
-    PydvdidException,
-    VideoTsPathDoesNotExistException
+    FileTimeOutOfRangeException,
+    PathDoesNotExistException,
+    PydvdidException
 )
 import pydvdid
 
@@ -31,30 +31,30 @@ def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, 
 
 @istest
 @patch("pydvdid.exceptions.PydvdidException.__init__")
-def dvdpathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Tests that instantiation of DvdPathDoesNotExistException instantiates the base class with a
+def pathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
+    """Tests that instantiation of PathDoesNotExistException instantiates the base class with a
        formatted message.
     """
 
     mock_init.return_value = None
 
-    DvdPathDoesNotExistException("DVD_PATH")
+    PathDoesNotExistException("DVD_PATH")
 
     mock_init.assert_called_once_with("Path 'DVD_PATH' does not exist.")
 
 
 @istest
 @patch("pydvdid.exceptions.PydvdidException.__init__")
-def videotspathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
-    """Tests that instantiation of VideoTsPathDoesNotExistException instantiates the base class with
-       a formatted message.
+def filetimeoutofrangeexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
+    """Tests that instantiation of FileTimeOutOfRangeException instantiates the base class with a
+       formatted message.
     """
 
     mock_init.return_value = None
 
-    VideoTsPathDoesNotExistException("DVD_PATH/VIDEO_TS")
+    FileTimeOutOfRangeException(12345678)
 
-    mock_init.assert_called_once_with("Path 'DVD_PATH/VIDEO_TS' does not exist.")
+    mock_init.assert_called_once_with("File Time '12345678' is outside of the allowable range.")
 
 
 @istest

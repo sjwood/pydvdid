@@ -3,12 +3,15 @@
 
 
 from __future__ import absolute_import
-from __future__ import print_function
-from glob import glob
-from os.path import isdir, join
+from datetime import datetime
+from os import listdir
+from os.path import basename, getctime, getsize, isdir, isfile, join
+from struct import pack
 from .crc64calculator import _Crc64Calculator
-from .exceptions import DvdPathDoesNotExistException, VideoTsPathDoesNotExistException
-
+from .exceptions import (
+    FileTimeOutOfRangeException,
+    PathDoesNotExistException
+)
 
 def compute(dvd_path):
     """Computes a Windows API IDvdInfo2::GetDiscID-compatible 64-bit Cyclic Redundancy Check
@@ -25,7 +28,9 @@ def compute(dvd_path):
     calculator = _Crc64Calculator(0x92c64265d32139a4)
 
     for video_ts_file_path in _get_video_ts_file_paths(dvd_path):
-        print(video_ts_file_path)
+        calculator.update(_get_file_creation_time(video_ts_file_path))
+        calculator.update(_get_file_size(video_ts_file_path))
+        calculator.update(_get_file_name(video_ts_file_path))
 
     return calculator.crc64
 
@@ -35,7 +40,7 @@ def _check_dvd_path_exists(dvd_path):
     """
 
     if isdir(dvd_path) == False:
-        raise DvdPathDoesNotExistException("Path '{0}' does not exist.".format(dvd_path))
+        raise PathDoesNotExistException(dvd_path)
 
 
 def _check_video_ts_path_exists(dvd_path):
@@ -45,7 +50,7 @@ def _check_video_ts_path_exists(dvd_path):
     video_ts_path = join(dvd_path, "VIDEO_TS")
 
     if isdir(video_ts_path) == False:
-        raise VideoTsPathDoesNotExistException("Path '{0}' does not exist.".format(video_ts_path))
+        raise PathDoesNotExistException(video_ts_path)
 
 
 def _get_video_ts_file_paths(dvd_path):
@@ -53,6 +58,52 @@ def _get_video_ts_file_paths(dvd_path):
        DVD path.
     """
 
-    video_ts_files_path = join(dvd_path, "VIDEO_TS", "*")
+    video_ts_files_path = join(dvd_path, "VIDEO_TS")
 
-    return sorted(glob(video_ts_files_path))
+    video_ts_paths = listdir(video_ts_files_path)
+
+    video_ts_file_paths = [path for path in video_ts_paths if isfile(path)]
+
+    return sorted(video_ts_file_paths)
+
+
+def _get_file_creation_time(file_path):
+    """Returns the creation time of the file at the specified file path in Microsoft FILETIME
+       structure format (https://msdn.microsoft.com/en-us/library/windows/desktop/ms724284.aspx),
+       formatted as a 8-byte unsigned integer byte string.
+    """
+
+    ctime = getctime(file_path)
+
+    if ctime < -11644473600 or ctime >= 253402300800:
+        raise FileTimeOutOfRangeException(ctime)
+
+    creation_time_datetime = datetime.utcfromtimestamp(ctime)
+
+    creation_time_epoch_offset = creation_time_datetime - datetime(1601, 1, 1)
+
+    creation_time_filetime = int(creation_time_epoch_offset.total_seconds() * (10 ** 7))
+
+    return pack("Q", creation_time_filetime)
+
+
+def _get_file_size(file_path):
+    """Returns the size of the file at the specified file path, formatted as a 4-byte unsigned
+       integer byte string.
+    """
+
+    file_size = getsize(file_path)
+
+    return pack("I", file_size)
+
+
+def _get_file_name(file_path):
+    """Returns the name of the file at the specified file path, formatted as a UTF-8 string
+       terminated with a null character.
+    """
+
+    file_name = basename(file_path)
+
+    utf8_file_name = file_name.encode("utf-8")
+
+    return utf8_file_name + "\0"

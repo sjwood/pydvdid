@@ -67,7 +67,7 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
                                                                      crc64_one, polynomial_two,
                                                                      crc64_two,
                                                                      comparison_function_name,
-                                                                     expectation, mock_init):
+                                                                     expected, mock_init):
     """Tests that invocation of == and != equality comparisons return correctly.
 
        (This is a Nose generator test which receives a set of data provided by nose-parameterized).
@@ -86,7 +86,7 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
 
     comparison_value = comparison_function(result_one, result_two)
     assert_message = "Unexpected result '{0}' for test '{1}'".format(comparison_value, description)
-    eq_(expectation, comparison_value, assert_message)
+    eq_(expected, comparison_value, assert_message)
 
     mock_init.assert_has_calls([
         call(polynomial_one),

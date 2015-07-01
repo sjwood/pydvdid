@@ -15,20 +15,22 @@ class PydvdidException(Exception):
         return Exception.__new__(cls, *args, **kwargs)
 
 
-class DvdPathDoesNotExistException(PydvdidException):
-    """Implements a class that represents the exception raised when a DVD path does not exist.
+class PathDoesNotExistException(PydvdidException):
+    """Implements a class that represents the exception raised when a path does not exist.
     """
 
-    def __init__(self, dvd_path):
+    def __init__(self, path):
         template = "Path '{0}' does not exist."
-        super(DvdPathDoesNotExistException, self).__init__(template.format(dvd_path))
+        super(PathDoesNotExistException, self).__init__(template.format(path))
 
 
-class VideoTsPathDoesNotExistException(PydvdidException):
-    """Implements a class that represents the exception raised when a DVD path does not contain a
-       VIDEO_TS folder.
+class FileTimeOutOfRangeException(PydvdidException):
+    """Implements a class that represents the exception raised when a file's creation or
+       modification time is outside the allowable range (i.e. before 1601-01-01 00:00:00 or after
+       9999-12-31 23:59:59).
     """
 
-    def __init__(self, video_ts_path):
-        template = "Path '{0}' does not exist."
-        super(VideoTsPathDoesNotExistException, self).__init__(template.format(video_ts_path))
+    def __init__(self, file_time):
+        template = "File Time '{0}' is outside of the allowable range."
+        message = template.format(file_time)
+        super(FileTimeOutOfRangeException, self).__init__(message)

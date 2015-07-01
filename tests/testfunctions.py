@@ -153,8 +153,6 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
     except FileTimeOutOfRangeException:
         pass
     except Exception as exception: # pylint: disable=locally-disabled, broad-except
-        print exception
-        ok_(False)
         template = "Test case '{0}' failed: An unexpected {1} exception was raised."
         ok_(False, template.format(description, type(exception).__name__))
     else:

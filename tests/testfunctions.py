@@ -165,7 +165,7 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
 @istest
 @parameterized([
     param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600, "\x00\x00\x00\x00\x00\x00\x00\x00"),
-    param("CTime 9999-12-31 23:59:59", "2.pdf", 253402300799, "\x00\xaa\x27\xd1\x5e\x5a\xc8\x24"),
+    param("CTime 9999-12-31 23:59:59", "2.pdf", 253402300799, "\x80\xa9\x27\xd1\x5e\x5a\xc8\x24"),
     param("CTime 2015-07-01 21:51:43", "3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name

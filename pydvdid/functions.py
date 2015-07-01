@@ -82,9 +82,21 @@ def _get_file_creation_time(file_path):
 
     creation_time_epoch_offset = creation_time_datetime - datetime(1601, 1, 1)
 
-    creation_time_filetime = int(creation_time_epoch_offset.total_seconds() * (10 ** 7))
+    creation_time_secs_from_epoch = _convert_timedelta_to_seconds(creation_time_epoch_offset)
+
+    creation_time_filetime = int(creation_time_secs_from_epoch * (10 ** 7))
 
     return pack("Q", creation_time_filetime)
+
+
+def _convert_timedelta_to_seconds(timedelta):
+    """Returns the total seconds calculated from the supplied timedelta.
+
+       (Function provided to enable running on Python 2.6 which lacks timedelta.total_seconds()).
+    """
+
+    days_in_seconds = timedelta.days * 24 * 3600
+    return (timedelta.microseconds + (timedelta.seconds + days_in_seconds) * 10 ** 6) / 10 ** 6
 
 
 def _get_file_size(file_path):

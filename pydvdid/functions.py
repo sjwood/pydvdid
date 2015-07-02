@@ -47,7 +47,7 @@ def _check_video_ts_path_exists(dvd_path):
     """Raises an exception if the specified DVD path does not contain a VIDEO_TS folder.
     """
 
-    video_ts_path = join(dvd_path, b"VIDEO_TS")
+    video_ts_path = join(dvd_path, "VIDEO_TS")
 
     if isdir(video_ts_path) == False:
         raise PathDoesNotExistException(video_ts_path)
@@ -58,7 +58,7 @@ def _get_video_ts_file_paths(dvd_path):
        DVD path.
     """
 
-    video_ts_files_path = join(dvd_path, b"VIDEO_TS")
+    video_ts_files_path = join(dvd_path, "VIDEO_TS")
 
     video_ts_paths = listdir(video_ts_files_path)
 
@@ -86,7 +86,7 @@ def _get_file_creation_time(file_path):
 
     creation_time_filetime = int(creation_time_secs_from_epoch * (10 ** 7))
 
-    return pack(b"Q", creation_time_filetime)
+    return pack("Q", creation_time_filetime)
 
 
 def _convert_timedelta_to_seconds(timedelta):
@@ -106,7 +106,7 @@ def _get_file_size(file_path):
 
     file_size = getsize(file_path)
 
-    return pack(b"I", file_size)
+    return pack("I", file_size)
 
 
 def _get_file_name(file_path):

@@ -15,7 +15,7 @@ class Crc64Result(object):
         """Returns the topmost 4 bytes of the checksum formatted as a lowercase hex string.
         """
 
-        return format(self._crc64 >> 32, b"08x")
+        return format(self._crc64 >> 32, "08x")
 
 
     @property
@@ -23,7 +23,7 @@ class Crc64Result(object):
         """Returns the bottommost 4 bytes of the checksum formatted as a lowercase hex string.
         """
 
-        return format(self._crc64 & 0xffffffff, b"08x")
+        return format(self._crc64 & 0xffffffff, "08x")
 
 
     def __eq__(self, other):
@@ -35,4 +35,4 @@ class Crc64Result(object):
 
 
     def __str__(self):
-        return format(self._crc64, b"016x")
+        return format(self._crc64, "016x")

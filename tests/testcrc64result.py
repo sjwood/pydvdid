@@ -33,7 +33,7 @@ def crc64result_high_bytes_returns_correct_value(mock_init): # pylint: disable=l
     result = Crc64Result(0x3af1)
     result._crc64 = 2246800662182009355 # pylint: disable=locally-disabled, protected-access
 
-    eq_(b"1f2e3d4c", result.high_bytes)
+    eq_("1f2e3d4c", result.high_bytes)
 
     mock_init.assert_called_once_with(0x3af1)
 
@@ -50,17 +50,17 @@ def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=lo
     result = Crc64Result(0x88889999)
     result._crc64 = 2246800662182009355 # pylint: disable=locally-disabled, protected-access
 
-    eq_(b"56789a0b", result.low_bytes)
+    eq_("56789a0b", result.low_bytes)
 
     mock_init.assert_called_once_with(0x88889999)
 
 
 @istest
 @parameterized([
-    param(b"a == b is True", 1, 1001, 2, 1001, "_equality_comparison", True),
-    param(b"a == b is False", 4, 2001, 4, 4001, "_equality_comparison", False),
-    param(b"a != b is False", 8, 8001, 16, 8001, "_inequality_comparison", False),
-    param(b"a != b is True", 32, 16001, 32, 32001, "_inequality_comparison", True)
+    param("a == b is True", 1, 1001, 2, 1001, "_equality_comparison", True),
+    param("a == b is False", 4, 2001, 4, 4001, "_equality_comparison", False),
+    param("a != b is False", 8, 8001, 16, 8001, "_inequality_comparison", False),
+    param("a != b is True", 32, 16001, 32, 32001, "_inequality_comparison", True)
 ])
 @patch("pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
 def crc64result_equality_and_inequality_comparisons_return_correctly(description, polynomial_one,
@@ -85,7 +85,7 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
     result_two._crc64 = crc64_two # pylint: disable=locally-disabled, protected-access
 
     comparison_value = comparison_function(result_one, result_two)
-    assert_message = b"Unexpected result '{0}' for test '{1}'".format(comparison_value, description)
+    assert_message = "Unexpected result '{0}' for test '{1}'".format(comparison_value, description)
     eq_(expected, comparison_value, assert_message)
 
     mock_init.assert_has_calls([
@@ -101,7 +101,7 @@ def _get_module_function(function_name):
     """
 
     if not hasattr(modules[__name__], function_name):
-        raise ValueError(b"Function {0} does not exist".format(function_name))
+        raise ValueError("Function {0} does not exist".format(function_name))
 
     return getattr(modules[__name__], function_name)
 

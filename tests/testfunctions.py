@@ -3,7 +3,7 @@
 
 
 from __future__ import absolute_import
-from binascii import hexlify
+#from binascii import hexlify
 from mock import call, patch
 from nose_parameterized import parameterized, param
 from nose.tools import eq_, istest, ok_
@@ -15,10 +15,10 @@ from pydvdid.functions import (
     _check_dvd_path_exists,
     _check_video_ts_path_exists,
     _get_file_creation_time,
-    _get_file_size,
     _get_video_ts_file_paths
 )
 #    _get_file_name,
+#    _get_file_size,
 
 
 @istest

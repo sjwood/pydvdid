@@ -89,7 +89,7 @@ def _get_file_creation_time(file_path):
     creation_time_filetime = int(creation_time_secs_from_epoch * (10 ** 7))
 
     file_creation_time = bytearray(8)
-    pack_into("Q", file_creation_time, 0, creation_time_filetime)
+    pack_into(b"Q", file_creation_time, 0, creation_time_filetime)
 
     return file_creation_time
 

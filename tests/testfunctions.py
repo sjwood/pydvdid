@@ -242,4 +242,7 @@ def _format_as_bytestring(value):
        with both Python2 and Python3.
     """
 
-    return "".join("{:02x}".format(byte) for byte in bytearray(value, "utf-8"))
+    if not type(value) == bytearray:
+        value = bytearray(value, "utf8")
+
+    return "".join("{:02x}".format(byte) for byte in value)

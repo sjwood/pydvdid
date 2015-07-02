@@ -12,8 +12,8 @@ from .functions import compute
 
 
 __all__ = [
-    "compute",
-    "FileTimeOutOfRangeException",
-    "PathDoesNotExistException",
-    "PydvdidException"
+    b"compute",
+    b"FileTimeOutOfRangeException",
+    b"PathDoesNotExistException",
+    b"PydvdidException"
 ]

@@ -10,7 +10,7 @@ class PydvdidException(Exception):
 
     def __new__(cls, *args, **kwargs):
         if cls is PydvdidException:
-            raise TypeError("PydvdidException may not be directly instantiated.")
+            raise TypeError(b"PydvdidException may not be directly instantiated.")
 
         return Exception.__new__(cls, *args, **kwargs)
 
@@ -20,7 +20,7 @@ class PathDoesNotExistException(PydvdidException):
     """
 
     def __init__(self, path):
-        template = "Path '{0}' does not exist."
+        template = b"Path '{0}' does not exist."
         super(PathDoesNotExistException, self).__init__(template.format(path))
 
 
@@ -31,6 +31,6 @@ class FileTimeOutOfRangeException(PydvdidException):
     """
 
     def __init__(self, file_time):
-        template = "File Time '{0}' is outside of the allowable range."
+        template = b"File Time '{0}' is outside of the allowable range."
         message = template.format(file_time)
         super(FileTimeOutOfRangeException, self).__init__(message)

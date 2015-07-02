@@ -34,6 +34,19 @@ do
     fi
 done
 
+# find and delete any python3 cached directories
+PYCACHE_DIRECTORIES=$(find "$SCRIPT_DIRECTORY" -type d | grep "^.*\__pycache__\$")
+IFS=$'\n'$'\r'
+for PYCACHE_DIRECTORY in $PYCACHE_DIRECTORIES
+do
+    rm --recursive --force "$PYCACHE_DIRECTORY"
+    if [ $? -ne 0 ]
+    then
+        __echo_to_stderr "Cannot delete pycache directory $PYCACHE_DIRECTORY"
+        exit 1
+    fi
+done
+
 # find and delete the package directories
 PACKAGE_DIRECTORIES=$(find "$SCRIPT_DIRECTORY" -type d | grep "^.*\.egg-info\$")
 IFS=$'\n'$'\r'

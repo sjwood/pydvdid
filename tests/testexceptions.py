@@ -20,17 +20,17 @@ def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, 
     """
 
     try:
-        PydvdidException("This should not work.")
+        PydvdidException(b"This should not work.")
     except TypeError as expected:
-        eq_("PydvdidException may not be directly instantiated.", str(expected))
+        eq_(b"PydvdidException may not be directly instantiated.", str(expected))
     except Exception as unexpected: # pylint: disable=locally-disabled, broad-except
-        ok_(False, "An unexpected {0} exception was raised.".format(type(unexpected).__name__))
+        ok_(False, b"An unexpected {0} exception was raised.".format(type(unexpected).__name__))
     else:
-        ok_(False, "An exception was expected but was not raised.")
+        ok_(False, b"An exception was expected but was not raised.")
 
 
 @istest
-@patch("pydvdid.exceptions.PydvdidException.__init__")
+@patch(b"pydvdid.exceptions.PydvdidException.__init__")
 def pathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that instantiation of PathDoesNotExistException instantiates the base class with a
        formatted message.
@@ -38,13 +38,13 @@ def pathdoesnotexistexception___init__calls_base___init___with_correct_message(m
 
     mock_init.return_value = None
 
-    PathDoesNotExistException("DVD_PATH")
+    PathDoesNotExistException(b"DVD_PATH")
 
-    mock_init.assert_called_once_with("Path 'DVD_PATH' does not exist.")
+    mock_init.assert_called_once_with(b"Path 'DVD_PATH' does not exist.")
 
 
 @istest
-@patch("pydvdid.exceptions.PydvdidException.__init__")
+@patch(b"pydvdid.exceptions.PydvdidException.__init__")
 def filetimeoutofrangeexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that instantiation of FileTimeOutOfRangeException instantiates the base class with a
        formatted message.
@@ -54,7 +54,7 @@ def filetimeoutofrangeexception___init__calls_base___init___with_correct_message
 
     FileTimeOutOfRangeException(12345678)
 
-    mock_init.assert_called_once_with("File Time '12345678' is outside of the allowable range.")
+    mock_init.assert_called_once_with(b"File Time '12345678' is outside of the allowable range.")
 
 
 @istest
@@ -78,6 +78,6 @@ def _assert_exception_type_is_subclass_of_pydvdidexception(exception_type): # py
     """Asserts that supplied exception type is a subclass of PydvdidException.
     """
 
-    assert_message = "{0} is not subclassed from PydvdidException.".format(exception_type.__name__)
+    assert_message = b"{0} is not subclassed from PydvdidException.".format(exception_type.__name__)
 
     ok_(not issubclass(type, PydvdidException), assert_message)

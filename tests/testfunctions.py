@@ -15,10 +15,10 @@ from pydvdid.functions import (
     _check_dvd_path_exists,
     _check_video_ts_path_exists,
     _get_file_creation_time,
-    _get_file_name,
     _get_file_size,
     _get_video_ts_file_paths
 )
+#    _get_file_name,
 
 
 @istest
@@ -215,8 +215,8 @@ def _get_file_size_returns_correctly(description, file_path, file_size, expected
 
 #@istest
 #@parameterized([
-#    param(b"Standard DVD file", b"/VIDEO_TS/VIDEO_TS.IFO", b"VIDEO_TS.IFO", b"VIDEO_TS.IFO\x00"),
-#    param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
+#   param(b"Standard DVD file", b"/VIDEO_TS/VIDEO_TS.IFO", b"VIDEO_TS.IFO", b"VIDEO_TS.IFO\x00"),
+#   param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
 #])
 #@patch("pydvdid.functions.basename") # pylint: disable=locally-disabled, invalid-name
 #def _get_file_name_returns_correctly(description, file_path, file_name, expected, mock_basename):

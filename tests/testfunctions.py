@@ -35,7 +35,7 @@ def _check_dvd_path_exists_does_not_raise_exception_when_path_exists(mock_isdir)
     except Exception as exception: # pylint: disable=locally-disabled, broad-except
         ok_(False, "An unexpected {0} exception was raised.".format(type(exception).__name__))
 
-    mock_isdir.assert_called_once_with(b"DVD_PATH")
+    mock_isdir.assert_called_once_with("DVD_PATH")
 
 
 @istest
@@ -73,7 +73,7 @@ def _check_video_ts_path_exists_does_not_raise_exception_when_path_exists(mock_i
     except Exception as exception: # pylint: disable=locally-disabled, broad-except
         ok_(False, "An unexpected {0} exception was raised.".format(type(exception).__name__))
 
-    mock_isdir.assert_called_once_with(b"DVD_PATH/VIDEO_TS")
+    mock_isdir.assert_called_once_with("DVD_PATH/VIDEO_TS")
 
 
 @istest

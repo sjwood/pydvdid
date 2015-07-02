@@ -57,10 +57,10 @@ def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=lo
 
 @istest
 @parameterized([
-    param(b"a == b is True", 1, 1001, 2, 1001, b"_equality_comparison", True),
-    param(b"a == b is False", 4, 2001, 4, 4001, b"_equality_comparison", False),
-    param(b"a != b is False", 8, 8001, 16, 8001, b"_inequality_comparison", False),
-    param(b"a != b is True", 32, 16001, 32, 32001, b"_inequality_comparison", True)
+    param(b"a == b is True", 1, 1001, 2, 1001, "_equality_comparison", True),
+    param(b"a == b is False", 4, 2001, 4, 4001, "_equality_comparison", False),
+    param(b"a != b is False", 8, 8001, 16, 8001, "_inequality_comparison", False),
+    param(b"a != b is True", 32, 16001, 32, 32001, "_inequality_comparison", True)
 ])
 @patch("pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
 def crc64result_equality_and_inequality_comparisons_return_correctly(description, polynomial_one,
@@ -134,6 +134,6 @@ def crc64result___str___returns_correct_value(mock_init): # pylint: disable=loca
     result = Crc64Result(0xd00d)
     result._crc64 = 2246800662182009355 # pylint: disable=locally-disabled, protected-access
 
-    eq_(b"1f2e3d4c56789a0b", str(result))
+    eq_("1f2e3d4c56789a0b", str(result))
 
     mock_init.assert_called_once_with(0xd00d)

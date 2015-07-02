@@ -244,4 +244,4 @@ def _format_as_bytestring(value):
        with both Python2 and Python3.
     """
 
-    return "0x" + hexlify(value).replace("b'", "").replace("'", "")
+    return "0x" + str(hexlify(bytes(value))).replace("b'", "").replace("'", "")

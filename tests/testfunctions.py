@@ -3,7 +3,6 @@
 
 
 from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import unicode_literals
 from mock import call, patch
 from nose_parameterized import parameterized, param
@@ -167,7 +166,8 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
 #    param("CTime 2015-07-01 21:51:43", "3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
 @istest
 @parameterized([
-    param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600, "\x00\x00\x00\x00\x00\x00\x00\x00"),
+    param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600,
+          bytearray("\x00\x00\x00\x00\x00\x00\x00\x00", "utf8")),
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,
@@ -242,11 +242,5 @@ def _format_as_bytestring(value):
     """Simple utility function for providing a hex representation of a unicode string, compatible
        with both Python2 and Python3.
     """
-
-    print(type(value))
-    print(value)
-
-    if not isinstance(value, bytearray):
-        value = bytearray(value, "utf8")
 
     return "".join("{:02x}".format(byte) for byte in value)

@@ -6,8 +6,9 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from datetime import datetime
 from os import listdir
-from os.path import basename, getctime, getsize, isdir, isfile, join
-from struct import pack
+from os.path import getctime, isdir, isfile, join
+#basename, getsize
+from struct import pack_into
 from .crc64calculator import _Crc64Calculator
 from .exceptions import (
     FileTimeOutOfRangeException,
@@ -30,8 +31,8 @@ def compute(dvd_path):
 
     for video_ts_file_path in _get_video_ts_file_paths(dvd_path):
         calculator.update(_get_file_creation_time(video_ts_file_path))
-        calculator.update(_get_file_size(video_ts_file_path))
-        calculator.update(_get_file_name(video_ts_file_path))
+#        calculator.update(_get_file_size(video_ts_file_path))
+#        calculator.update(_get_file_name(video_ts_file_path))
 
     return calculator.crc64
 
@@ -71,7 +72,7 @@ def _get_video_ts_file_paths(dvd_path):
 def _get_file_creation_time(file_path):
     """Returns the creation time of the file at the specified file path in Microsoft FILETIME
        structure format (https://msdn.microsoft.com/en-us/library/windows/desktop/ms724284.aspx),
-       formatted as a 8-byte unsigned integer byte string.
+       formatted as a 8-byte unsigned integer bytearray.
     """
 
     ctime = getctime(file_path)
@@ -87,7 +88,10 @@ def _get_file_creation_time(file_path):
 
     creation_time_filetime = int(creation_time_secs_from_epoch * (10 ** 7))
 
-    return pack("Q", creation_time_filetime)
+    file_creation_time = bytearray(8)
+    pack_into("Q", file_creation_time, 0, creation_time_filetime)
+
+    return file_creation_time
 
 
 def _convert_timedelta_to_seconds(timedelta):
@@ -100,23 +104,23 @@ def _convert_timedelta_to_seconds(timedelta):
     return (timedelta.microseconds + (timedelta.seconds + days_in_seconds) * 10 ** 6) / 10 ** 6
 
 
-def _get_file_size(file_path):
-    """Returns the size of the file at the specified file path, formatted as a 4-byte unsigned
-       integer byte string.
-    """
+#def _get_file_size(file_path):
+#    """Returns the size of the file at the specified file path, formatted as a 4-byte unsigned
+#       integer byte string.
+#    """
+#
+#    file_size = getsize(file_path)
+#
+#    return pack("I", file_size)
 
-    file_size = getsize(file_path)
 
-    return pack("I", file_size)
-
-
-def _get_file_name(file_path):
-    """Returns the name of the file at the specified file path, formatted as a UTF-8 string
-       terminated with a null character.
-    """
-
-    file_name = basename(file_path)
-
-    utf8_file_name = file_name.encode(b"utf-8")
-
-    return utf8_file_name + b"\x00"
+#def _get_file_name(file_path):
+#    """Returns the name of the file at the specified file path, formatted as a UTF-8 string
+#       terminated with a null character.
+#    """
+#
+#    file_name = basename(file_path)
+#
+#    utf8_file_name = file_name.encode(b"utf-8")
+#
+#    return utf8_file_name + b"\x00"

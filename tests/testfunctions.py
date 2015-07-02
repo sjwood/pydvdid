@@ -163,12 +163,14 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
     mock_getctime.assert_called_once_with(file_path)
 
 
-#    param("CTime 9999-12-31 23:59:59", "2.pdf", 253402300799, "\x80\xa9\x27\xd1\x5e\x5a\xc8\x24"),
-#    param("CTime 2015-07-01 21:51:43", "3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
 @istest
 @parameterized([
     param("Creation Time '1601-01-01 00:00:00'", "DVD_PATH/VIDEO_TS/VTS_02_0.IFO", -11644473600,
-          bytearray("\x00\x00\x00\x00\x00\x00\x00\x00", "utf8")),
+          bytearray([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])),
+    param("Creation Time '9999-12-31 23:59:59'", "DVD_PATH/VIDEO_TS/VTS_02_1.VOB", 253402300799,
+          bytearray([0x80, 0xa9, 0x27, 0xd1, 0x5e, 0x5a, 0xc8, 0x24])),
+    param("Creation Time '2015-07-01 21:51:43'", "DVD_PATH/VIDEO_TS/VTS_02_2.VOB", 1435787503,
+          bytearray([0x80, 0x01, 0x23, 0x1e, 0x48, 0xb4, 0xd0, 0x01]))
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,

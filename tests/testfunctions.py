@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
+from binascii import hexlify
 from mock import call, patch
 from nose_parameterized import parameterized, param
 from nose.tools import eq_, istest, nottest, ok_
@@ -167,7 +168,7 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
 @istest
 @parameterized([
     param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600,
-          bytearray("\x00\x00\x00\x00\x00\x00\x00\x00", "utf8")),
+          bytearray("\x00\x00\x00\x00\x00\x00\x00\x01", "utf8")),
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,
@@ -182,7 +183,7 @@ def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(d
 
     file_creation_time = _get_file_creation_time(file_path)
 
-    template = "Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
+    template = "Test case '{0}' failed: expected '{1}', actual '{2}'."
     assert_message = template.format(description, _format_as_bytestring(expected),
                                      _format_as_bytestring(file_creation_time))
 
@@ -243,4 +244,4 @@ def _format_as_bytestring(value):
        with both Python2 and Python3.
     """
 
-    return "".join("{:02x}".format(byte) for byte in value)
+    return "0x" + hexlify(value).replace("b'", "").replace("'", "")

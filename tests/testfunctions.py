@@ -136,8 +136,8 @@ def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, m
 
 @istest
 @parameterized([
-    param("CTime '1600-12-31 23:59:59'", "DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", -11644473601),
-    param("CTime '10000-01-01 00:00:00'", "DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", 253402300800)
+    param("Creation Time '1600-12-31 23:59:59'", "DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", -11644473601),
+    param("Creation Time '10000-01-01 00:00:00'", "DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", 253402300800)
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(description,
@@ -167,8 +167,8 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
 #    param("CTime 2015-07-01 21:51:43", "3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
 @istest
 @parameterized([
-    param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600,
-          bytearray("\x00\x00\x00\x00\x00\x00\x00\x01", "utf8")),
+    param("Creation Time '1601-01-01 00:00:00'", "DVD_PATH/VIDEO_TS/VTS_02_0.IFO", -11644473600,
+          bytearray("\x00\x00\x00\x00\x00\x00\x00\x00", "utf8")),
 ])
 @patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,

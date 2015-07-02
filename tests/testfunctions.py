@@ -3,6 +3,7 @@
 
 
 from __future__ import absolute_import
+from __future__ import print_function
 from __future__ import unicode_literals
 from mock import call, patch
 from nose_parameterized import parameterized, param
@@ -241,6 +242,9 @@ def _format_as_bytestring(value):
     """Simple utility function for providing a hex representation of a unicode string, compatible
        with both Python2 and Python3.
     """
+
+    print(type(value))
+    print(value)
 
     if not isinstance(value, bytearray):
         value = bytearray(value, "utf8")

@@ -22,7 +22,7 @@ def crc64result___init___sets_private_variables(): # pylint: disable=locally-dis
 
 
 @istest
-@patch(b"pydvdid.crc64result.Crc64Result.__init__")
+@patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result_high_bytes_returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of high_bytes returns the topmost 4 bytes of _crc64, formatted as a
        lowercase hex string.
@@ -39,7 +39,7 @@ def crc64result_high_bytes_returns_correct_value(mock_init): # pylint: disable=l
 
 
 @istest
-@patch(b"pydvdid.crc64result.Crc64Result.__init__")
+@patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of low_bytes returns the bottommost 4 bytes of _crc64, formatted as a
        lowercase hex string.
@@ -62,7 +62,7 @@ def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=lo
     param(b"a != b is False", 8, 8001, 16, 8001, b"_inequality_comparison", False),
     param(b"a != b is True", 32, 16001, 32, 32001, b"_inequality_comparison", True)
 ])
-@patch(b"pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
+@patch("pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
 def crc64result_equality_and_inequality_comparisons_return_correctly(description, polynomial_one,
                                                                      crc64_one, polynomial_two,
                                                                      crc64_two,
@@ -123,7 +123,7 @@ def _inequality_comparison(first, second):
 
 
 @istest
-@patch(b"pydvdid.crc64result.Crc64Result.__init__")
+@patch("pydvdid.crc64result.Crc64Result.__init__")
 def crc64result___str___returns_correct_value(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of str() returns the the full _crc64 value, formated as a lowercase hex
        string.

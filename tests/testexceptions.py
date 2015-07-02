@@ -30,7 +30,7 @@ def pydvdidexception_is_not_instantiable(): # pylint: disable=locally-disabled, 
 
 
 @istest
-@patch(b"pydvdid.exceptions.PydvdidException.__init__")
+@patch("pydvdid.exceptions.PydvdidException.__init__")
 def pathdoesnotexistexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that instantiation of PathDoesNotExistException instantiates the base class with a
        formatted message.
@@ -44,7 +44,7 @@ def pathdoesnotexistexception___init__calls_base___init___with_correct_message(m
 
 
 @istest
-@patch(b"pydvdid.exceptions.PydvdidException.__init__")
+@patch("pydvdid.exceptions.PydvdidException.__init__")
 def filetimeoutofrangeexception___init__calls_base___init___with_correct_message(mock_init): # pylint: disable=locally-disabled, invalid-name
     """Tests that instantiation of FileTimeOutOfRangeException instantiates the base class with a
        formatted message.

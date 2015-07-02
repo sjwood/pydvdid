@@ -22,7 +22,7 @@ from pydvdid.functions import (
 
 
 @istest
-@patch(b"pydvdid.functions.isdir")
+@patch("pydvdid.functions.isdir")
 def _check_dvd_path_exists_does_not_raise_exception_when_path_exists(mock_isdir): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of _check_dvd_path_exists() with a valid path does not raise an
        exception.
@@ -39,7 +39,7 @@ def _check_dvd_path_exists_does_not_raise_exception_when_path_exists(mock_isdir)
 
 
 @istest
-@patch(b"pydvdid.functions.isdir")
+@patch("pydvdid.functions.isdir")
 def _check_dvd_path_exists_raises_exception_when_path_does_not_exist(mock_isdir): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of _check_dvd_path_exists() with an invalid path raises a
        PathDoesNotExistException exception.
@@ -60,7 +60,7 @@ def _check_dvd_path_exists_raises_exception_when_path_does_not_exist(mock_isdir)
 
 
 @istest
-@patch(b"pydvdid.functions.isdir")
+@patch("pydvdid.functions.isdir")
 def _check_video_ts_path_exists_does_not_raise_exception_when_path_exists(mock_isdir): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of _check_video_ts_path_exists() with a valid path does not raise an
        exception.
@@ -77,7 +77,7 @@ def _check_video_ts_path_exists_does_not_raise_exception_when_path_exists(mock_i
 
 
 @istest
-@patch(b"pydvdid.functions.isdir")
+@patch("pydvdid.functions.isdir")
 def _check_video_ts_path_exists_raises_exception_when_path_does_not_exist(mock_isdir): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of _check_video_ts_path_exists() with an invalid path raises a
        PathDoesNotExistException exception.
@@ -98,8 +98,8 @@ def _check_video_ts_path_exists_raises_exception_when_path_does_not_exist(mock_i
 
 
 @istest
-@patch(b"pydvdid.functions.isfile")
-@patch(b"pydvdid.functions.listdir")
+@patch("pydvdid.functions.isfile")
+@patch("pydvdid.functions.listdir")
 def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, mock_isfile): # pylint: disable=locally-disabled, invalid-name
     """Tests that invocation of _get_video_ts_file_paths() uses listdir to get the contents of the
        VIDEO_TS folder of the specified DVD path, then uses isfile to filter out directories, then
@@ -138,7 +138,7 @@ def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, m
     param(b"CTime '1600-12-31 23:59:59'", b"DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", -11644473601),
     param(b"CTime '10000-01-01 00:00:00'", b"DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", 253402300800)
 ])
-@patch(b"pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
+@patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(description,
                                                                                 file_path, ctime,
                                                                                 mock_getctime):
@@ -168,7 +168,7 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
     param(b"CTime 9999-12-31 23:59:59", b"2.pdf", 253402300799, "\x80\xa9\x27\xd1\x5e\x5a\xc8\x24"),
     param(b"CTime 2015-07-01 21:51:43", b"3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
 ])
-@patch(b"pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
+@patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
 def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,
                                                                                file_path, ctime,
                                                                                expected,
@@ -196,7 +196,7 @@ def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(d
     param(b"Size < 16Mb", b"DVD_PATH/VIDEO_TS/VTS_01_1.VOB", 14412088, "\x38\xe9\xdb\x00"),
     param(b"Size < 4Gb", b"DVD_PATH/VIDEO_TS/VTS_02_0.VOB", 3812800233, "\xe9\xb6\x42\xe3")
 ])
-@patch(b"pydvdid.functions.getsize") # pylint: disable=locally-disabled, invalid-name
+@patch("pydvdid.functions.getsize") # pylint: disable=locally-disabled, invalid-name
 def _get_file_size_returns_correctly(description, file_path, file_size, expected, mock_getsize):
     """Tests that invocation of _get_file_size() returns correctly.
     """
@@ -218,7 +218,7 @@ def _get_file_size_returns_correctly(description, file_path, file_size, expected
     param(b"Standard DVD file", b"/VIDEO_TS/VIDEO_TS.IFO", b"VIDEO_TS.IFO", b"VIDEO_TS.IFO\x00"),
     param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
 ])
-@patch(b"pydvdid.functions.basename") # pylint: disable=locally-disabled, invalid-name
+@patch("pydvdid.functions.basename") # pylint: disable=locally-disabled, invalid-name
 def _get_file_name_returns_correctly(description, file_path, file_name, expected, mock_basename):
     """Tests that invocation of _get_file_name() returns correctly.
     """

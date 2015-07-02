@@ -3,6 +3,7 @@
 
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 from inspect import getmembers, isclass
 from mock import patch
 from nose.tools import eq_, istest, nottest, ok_

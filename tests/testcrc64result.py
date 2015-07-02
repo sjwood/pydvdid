@@ -3,6 +3,7 @@
 
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 from sys import modules
 from mock import call, patch
 from nose_parameterized import parameterized, param

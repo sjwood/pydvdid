@@ -3,10 +3,10 @@
 
 
 from __future__ import absolute_import
-from binascii import hexlify
+from __future__ import unicode_literals
 from mock import call, patch
 from nose_parameterized import parameterized, param
-from nose.tools import eq_, istest, ok_
+from nose.tools import eq_, istest, nottest, ok_
 from pydvdid.exceptions import (
     FileTimeOutOfRangeException,
     PathDoesNotExistException
@@ -182,7 +182,8 @@ def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(d
     file_creation_time = _get_file_creation_time(file_path)
 
     template = "Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
-    assert_message = template.format(description, hexlify(expected), hexlify(file_creation_time))
+    assert_message = template.format(description, _format_as_bytestring(expected),
+                                     _format_as_bytestring(file_creation_time))
 
     eq_(expected, file_creation_time, assert_message)
 
@@ -233,3 +234,12 @@ def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(d
 #    eq_(expected, file_name_string, assert_message)
 #
 #    mock_basename.assert_called_once_with(file_path)
+
+
+@nottest
+def _format_as_bytestring(value):
+    """Simple utility function for providing a hex representation of a unicode string, compatible
+       with both Python2 and Python3.
+    """
+
+    return "".join("{:02x}".format(byte) for byte in bytearray(value, "utf-8"))

@@ -3,6 +3,7 @@
 
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 from datetime import datetime
 from os import listdir
 from os.path import basename, getctime, getsize, isdir, isfile, join

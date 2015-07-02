@@ -1,6 +1,8 @@
 """Implements all pydvdid package-specific exceptions.
 """
 
+from __future__ import unicode_literals
+
 
 class PydvdidException(Exception):
     """Implements a class that represents an exception raised by the pydvdid package. This exception

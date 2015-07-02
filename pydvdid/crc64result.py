@@ -2,6 +2,9 @@
 """
 
 
+from __future__ import unicode_literals
+
+
 class Crc64Result(object):
     """Implements a class that represents the result of a 64-bit Cyclic Redundancy Check checksum.
     """

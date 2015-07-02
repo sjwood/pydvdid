@@ -3,7 +3,7 @@
 
 
 from __future__ import absolute_import
-#from binascii import hexlify
+from binascii import hexlify
 from mock import call, patch
 from nose_parameterized import parameterized, param
 from nose.tools import eq_, istest, ok_
@@ -162,31 +162,31 @@ def _get_file_creation_time_raises_exception_when_file_creation_time_is_invalid(
     mock_getctime.assert_called_once_with(file_path)
 
 
-#@istest
-#@parameterized([
-#    param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600, "\x00\x00\x00\x00\x00\x00\x00\x00"),
 #    param("CTime 9999-12-31 23:59:59", "2.pdf", 253402300799, "\x80\xa9\x27\xd1\x5e\x5a\xc8\x24"),
 #    param("CTime 2015-07-01 21:51:43", "3.spec7", 1435787503, "\x80\x01\x23\x1e\x48\xb4\xd0\x01")
-#])
-#@patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
-#def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,
-#                                                                               file_path, ctime,
-#                                                                               expected,
-#                                                                               mock_getctime):
-#    """Tests that invocation of _get_file_creation_time() with a file path that has a creation time
-#       that is within the allowable range of values returns correctly.
-#    """
-#
-#    mock_getctime.return_value = ctime
-#
-#    file_creation_time = _get_file_creation_time(file_path)
-#
-#    template = "Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
-#    assert_message = template.format(description, hexlify(expected), hexlify(file_creation_time))
-#
-#    eq_(expected, file_creation_time, assert_message)
-#
-#    mock_getctime.assert_called_once_with(file_path)
+@istest
+@parameterized([
+    param("CTime 1601-01-01 00:00:00", "1.txt", -11644473600, "\x00\x00\x00\x00\x00\x00\x00\x00"),
+])
+@patch("pydvdid.functions.getctime") # pylint: disable=locally-disabled, invalid-name
+def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(description,
+                                                                               file_path, ctime,
+                                                                               expected,
+                                                                               mock_getctime):
+    """Tests that invocation of _get_file_creation_time() with a file path that has a creation time
+       that is within the allowable range of values returns correctly.
+    """
+
+    mock_getctime.return_value = ctime
+
+    file_creation_time = _get_file_creation_time(file_path)
+
+    template = "Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
+    assert_message = template.format(description, hexlify(expected), hexlify(file_creation_time))
+
+    eq_(expected, file_creation_time, assert_message)
+
+    mock_getctime.assert_called_once_with(file_path)
 
 
 #@istest

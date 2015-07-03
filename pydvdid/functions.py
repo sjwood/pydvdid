@@ -6,8 +6,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from datetime import datetime
 from os import listdir
-from os.path import getctime, getsize, isdir, isfile, join
-#basename
+from os.path import basename, getctime, getsize, isdir, isfile, join
 from struct import pack_into
 from .crc64calculator import _Crc64Calculator
 from .exceptions import (
@@ -32,7 +31,7 @@ def compute(dvd_path):
     for video_ts_file_path in _get_video_ts_file_paths(dvd_path):
         calculator.update(_get_file_creation_time(video_ts_file_path))
         calculator.update(_get_file_size(video_ts_file_path))
-#        calculator.update(_get_file_name(video_ts_file_path))
+        calculator.update(_get_file_name(video_ts_file_path))
 
     return calculator.crc64
 
@@ -117,13 +116,13 @@ def _get_file_size(file_path):
     return file_size
 
 
-#def _get_file_name(file_path):
-#    """Returns the name of the file at the specified file path, formatted as a UTF-8 string
-#       terminated with a null character.
-#    """
-#
-#    file_name = basename(file_path)
-#
-#    utf8_file_name = file_name.encode(b"utf-8")
-#
-#    return utf8_file_name + b"\x00"
+def _get_file_name(file_path):
+    """Returns the name of the file at the specified file path, formatted as a UTF-8 bytearray
+       terminated with a null character.
+    """
+
+    file_name = basename(file_path)
+
+    utf8_file_name = bytearray(file_name, "utf8")
+
+    return utf8_file_name + bytearray([0x00])

@@ -16,10 +16,10 @@ from pydvdid.functions import (
     _check_dvd_path_exists,
     _check_video_ts_path_exists,
     _get_file_creation_time,
+    _get_file_name,
     _get_file_size,
     _get_video_ts_file_paths
 )
-#    _get_file_name,
 
 
 @istest
@@ -223,26 +223,29 @@ def _get_file_size_returns_correctly(description, file_path, file_size, expected
     mock_getsize.assert_called_once_with(file_path)
 
 
-#@istest
-#@parameterized([
-#   param(b"Standard DVD file", b"/VIDEO_TS/VIDEO_TS.IFO", b"VIDEO_TS.IFO", b"VIDEO_TS.IFO\x00"),
-#   param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
-#])
-#@patch("pydvdid.functions.basename") # pylint: disable=locally-disabled, invalid-name
-#def _get_file_name_returns_correctly(description, file_path, file_name, expected, mock_basename):
-#    """Tests that invocation of _get_file_name() returns correctly.
-#    """
-#
-#    mock_basename.return_value = file_name
-#
-#    file_name_string = _get_file_name(file_path)
-#
-#    template = b"Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
-#    assert_message = template.format(description, hexlify(expected), hexlify(file_name_string))
-#
-#    eq_(expected, file_name_string, assert_message)
-#
-#    mock_basename.assert_called_once_with(file_path)
+#param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
+
+@istest
+@parameterized([
+    param("Standard DVD file", "/VIDEO_TS/VIDEO_TS.IFO", "VIDEO_TS.IFO",
+          bytearray([0x56, 0x49, 0x44, 0x45, 0x4f, 0x5f, 0x54, 0x53, 0x2e, 0x49, 0x46, 0x4f, 0x00]))
+])
+@patch("pydvdid.functions.basename") # pylint: disable=locally-disabled, invalid-name
+def _get_file_name_returns_correctly(description, file_path, file_name, expected, mock_basename):
+    """Tests that invocation of _get_file_name() returns correctly.
+    """
+
+    mock_basename.return_value = file_name
+
+    file_name_bytearray = _get_file_name(file_path)
+
+    template = "Test case '{0}' failed: expected '{1}', actual '{2}'."
+    assert_message = template.format(description, _format_as_bytestring(expected),
+                                     _format_as_bytestring(file_name_bytearray))
+
+    eq_(expected, file_name_bytearray, assert_message)
+
+    mock_basename.assert_called_once_with(file_path)
 
 
 @nottest

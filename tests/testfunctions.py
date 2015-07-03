@@ -16,10 +16,10 @@ from pydvdid.functions import (
     _check_dvd_path_exists,
     _check_video_ts_path_exists,
     _get_file_creation_time,
+    _get_file_size,
     _get_video_ts_file_paths
 )
 #    _get_file_name,
-#    _get_file_size,
 
 
 @istest
@@ -183,39 +183,44 @@ def _get_file_creation_time_returns_correctly_when_file_creation_time_is_valid(d
 
     mock_getctime.return_value = ctime
 
-    file_creation_time = _get_file_creation_time(file_path)
+    file_creation_time_bytearray = _get_file_creation_time(file_path)
 
-    template = "Test case '{0}' failed: expected '{1}', actual '{2}'."
+    template = "Test case {0}' failed: expected '{1}', actual '{2}'."
     assert_message = template.format(description, _format_as_bytestring(expected),
-                                     _format_as_bytestring(file_creation_time))
+                                     _format_as_bytestring(file_creation_time_bytearray))
 
-    eq_(expected, file_creation_time, assert_message)
+    eq_(expected, file_creation_time_bytearray, assert_message)
 
     mock_getctime.assert_called_once_with(file_path)
 
 
-#@istest
-#@parameterized([
-#    param("Size < 256b", "DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", 202, "\xca\x00\x00\x00"),
-#    param("Size < 64Kb", "DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", 43051, "\x2b\xa8\x00\x00"),
-#    param("Size < 16Mb", "DVD_PATH/VIDEO_TS/VTS_01_1.VOB", 14412088, "\x38\xe9\xdb\x00"),
-#    param("Size < 4Gb", "DVD_PATH/VIDEO_TS/VTS_02_0.VOB", 3812800233, "\xe9\xb6\x42\xe3")
-#])
-#@patch("pydvdid.functions.getsize") # pylint: disable=locally-disabled, invalid-name
-#def _get_file_size_returns_correctly(description, file_path, file_size, expected, mock_getsize):
-#    """Tests that invocation of _get_file_size() returns correctly.
-#    """
-#
-#    mock_getsize.return_value = file_size
-#
-#    file_size_string = _get_file_size(file_path)
-#
-#    template = "Test case '{0}' failed: expected '0x{1}', actual '0x{2}'."
-#    assert_message = template.format(description, hexlify(expected), hexlify(file_size_string))
-#
-#    eq_(expected, file_size_string, assert_message)
-#
-#    mock_getsize.assert_called_once_with(file_path)
+@istest
+@parameterized([
+    param("Size less than 256b", "DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", 202,
+          bytearray([0xca, 0x00, 0x00, 0x00])),
+    param("Size less than 64Kb", "DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", 43051,
+          bytearray([0x2b, 0xa8, 0x00, 0x00])),
+    param("Size less than 16Mb", "DVD_PATH/VIDEO_TS/VTS_01_1.VOB", 14412088,
+          bytearray([0x38, 0xe9, 0xdb, 0x00])),
+    param("Size less than 4Gb", "DVD_PATH/VIDEO_TS/VTS_02_0.VOB", 3812800233,
+          bytearray([0xe9, 0xb6, 0x42, 0xe3]))
+])
+@patch("pydvdid.functions.getsize") # pylint: disable=locally-disabled, invalid-name
+def _get_file_size_returns_correctly(description, file_path, file_size, expected, mock_getsize):
+    """Tests that invocation of _get_file_size() returns correctly.
+    """
+
+    mock_getsize.return_value = file_size
+
+    file_size_bytearray = _get_file_size(file_path)
+
+    template = "Test case '{0}' failed: expected '{1}', actual '{2}'."
+    assert_message = template.format(description, _format_as_bytestring(expected),
+                                     _format_as_bytestring(file_size_bytearray))
+
+    eq_(expected, file_size_bytearray, assert_message)
+
+    mock_getsize.assert_called_once_with(file_path)
 
 
 #@istest

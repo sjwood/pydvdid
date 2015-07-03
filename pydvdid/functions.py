@@ -6,8 +6,8 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from datetime import datetime
 from os import listdir
-from os.path import getctime, isdir, isfile, join
-#basename, getsize
+from os.path import getctime, getsize, isdir, isfile, join
+#basename
 from struct import pack_into
 from .crc64calculator import _Crc64Calculator
 from .exceptions import (
@@ -31,7 +31,7 @@ def compute(dvd_path):
 
     for video_ts_file_path in _get_video_ts_file_paths(dvd_path):
         calculator.update(_get_file_creation_time(video_ts_file_path))
-#        calculator.update(_get_file_size(video_ts_file_path))
+        calculator.update(_get_file_size(video_ts_file_path))
 #        calculator.update(_get_file_name(video_ts_file_path))
 
     return calculator.crc64
@@ -104,14 +104,17 @@ def _convert_timedelta_to_seconds(timedelta):
     return int((timedelta.microseconds + (timedelta.seconds + days_in_seconds) * 10 ** 6) / 10 ** 6)
 
 
-#def _get_file_size(file_path):
-#    """Returns the size of the file at the specified file path, formatted as a 4-byte unsigned
-#       integer byte string.
-#    """
-#
-#    file_size = getsize(file_path)
-#
-#    return pack("I", file_size)
+def _get_file_size(file_path):
+    """Returns the size of the file at the specified file path, formatted as a 4-byte unsigned
+       integer bytearray.
+    """
+
+    size = getsize(file_path)
+
+    file_size = bytearray(4)
+    pack_into(b"I", file_size, 0, size)
+
+    return file_size
 
 
 #def _get_file_name(file_path):

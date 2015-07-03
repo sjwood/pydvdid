@@ -101,7 +101,7 @@ def _convert_timedelta_to_seconds(timedelta):
     """
 
     days_in_seconds = timedelta.days * 24 * 3600
-    return (timedelta.microseconds + (timedelta.seconds + days_in_seconds) * 10 ** 6) / 10 ** 6
+    return int((timedelta.microseconds + (timedelta.seconds + days_in_seconds) * 10 ** 6) / 10 ** 6)
 
 
 #def _get_file_size(file_path):

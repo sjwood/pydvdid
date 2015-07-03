@@ -108,10 +108,8 @@ def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, m
     """
 
     mock_listdir.return_value = [
-        "DVD_PATH/VIDEO_TS/VTS_01_0.VOB",
-        "DVD_PATH/VIDEO_TS/unexpected_folder",
-        "DVD_PATH/VIDEO_TS/VTS_01_0.BUP",
-        "DVD_PATH/VIDEO_TS/VTS_01_0.IFO"
+        "DVD_PATH/VIDEO_TS/VTS_01_0.VOB", "DVD_PATH/VIDEO_TS/unexpected_folder",
+        "DVD_PATH/VIDEO_TS/VTS_01_0.BUP", "DVD_PATH/VIDEO_TS/VTS_01_0.IFO"
     ]
 
     mock_isfile.side_effect = [True, False, True, True]
@@ -119,18 +117,15 @@ def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, m
     video_ts_file_paths = _get_video_ts_file_paths("DVD_PATH")
 
     eq_([
-        "DVD_PATH/VIDEO_TS/VTS_01_0.BUP",
-        "DVD_PATH/VIDEO_TS/VTS_01_0.IFO",
+        "DVD_PATH/VIDEO_TS/VTS_01_0.BUP", "DVD_PATH/VIDEO_TS/VTS_01_0.IFO",
         "DVD_PATH/VIDEO_TS/VTS_01_0.VOB"
     ], video_ts_file_paths)
 
     mock_listdir.assert_called_once_with("DVD_PATH/VIDEO_TS")
 
     mock_isfile.assert_has_calls([
-        call("DVD_PATH/VIDEO_TS/VTS_01_0.VOB"),
-        call("DVD_PATH/VIDEO_TS/unexpected_folder"),
-        call("DVD_PATH/VIDEO_TS/VTS_01_0.BUP"),
-        call("DVD_PATH/VIDEO_TS/VTS_01_0.IFO")
+        call("DVD_PATH/VIDEO_TS/VTS_01_0.VOB"), call("DVD_PATH/VIDEO_TS/unexpected_folder"),
+        call("DVD_PATH/VIDEO_TS/VTS_01_0.BUP"), call("DVD_PATH/VIDEO_TS/VTS_01_0.IFO")
     ])
 
 
@@ -227,6 +222,8 @@ def _get_file_size_returns_correctly(description, file_path, file_size, expected
 
 @istest
 @parameterized([
+    param("Filename with Unicode euro char", "/VIDEO_TS/1\u20ac.txt", "1\u20ac.txt",
+          bytearray([0x31, 0xe2, 0x82, 0xac, 0x2e, 0x74, 0x78, 0x74, 0x00])),
     param("Standard DVD file", "/VIDEO_TS/VIDEO_TS.IFO", "VIDEO_TS.IFO",
           bytearray([0x56, 0x49, 0x44, 0x45, 0x4f, 0x5f, 0x54, 0x53, 0x2e, 0x49, 0x46, 0x4f, 0x00]))
 ])

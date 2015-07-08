@@ -4,10 +4,15 @@
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
-from sys import modules
-from mock import call, patch
-from nose_parameterized import parameterized, param
-from nose.tools import eq_, istest, nottest
+from mock import (
+    call, patch
+)
+from nose.tools import (
+    eq_, istest
+)
+from nose_parameterized import (
+    parameterized, param
+)
 from pydvdid.crc64result import Crc64Result
 
 
@@ -58,10 +63,10 @@ def crc64result_low_bytes_returns_correct_value(mock_init): # pylint: disable=lo
 
 @istest
 @parameterized([
-    param("a == b is True", 1, 1001, 2, 1001, "_equality_comparison", True),
-    param("a == b is False", 4, 2001, 4, 4001, "_equality_comparison", False),
-    param("a != b is False", 8, 8001, 16, 8001, "_inequality_comparison", False),
-    param("a != b is True", 32, 16001, 32, 32001, "_inequality_comparison", True)
+    param("a == b is True", 1, 1001, 2, 1001, "==", True),
+    param("a == b is False", 4, 2001, 4, 4001, "==", False),
+    param("a != b is False", 8, 8001, 16, 8001, "!=", False),
+    param("a != b is True", 32, 16001, 32, 32001, "!=", True)
 ])
 @patch("pydvdid.crc64result.Crc64Result.__init__") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
 def crc64result_equality_and_inequality_comparisons_return_correctly(description, polynomial_one,
@@ -77,7 +82,12 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
     mock_init.return_value = None
 
     # nose-parameterized can only pass through primitives, so get function from name string
-    comparison_function = _get_module_function(comparison_function_name)
+    if comparison_function_name == "==":
+        comparison_function = lambda first, second: first == second
+    elif comparison_function_name == "!=":
+        comparison_function = lambda first, second: first != second
+    else:
+        raise ValueError("Function {0} does not exist".format(comparison_function_name))
 
     result_one = Crc64Result(polynomial_one)
     result_one._crc64 = crc64_one # pylint: disable=locally-disabled, protected-access
@@ -93,34 +103,6 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
         call(polynomial_one),
         call(polynomial_two)
     ])
-
-
-@nottest
-def _get_module_function(function_name):
-    """Returns a function from the current module whose name matches the supplied function name, or
-       raises a ValueError.
-    """
-
-    if not hasattr(modules[__name__], function_name):
-        raise ValueError("Function {0} does not exist".format(function_name))
-
-    return getattr(modules[__name__], function_name)
-
-
-@nottest
-def _equality_comparison(first, second):
-    """Performs a simple == equality comparison.
-    """
-
-    return first == second
-
-
-@nottest
-def _inequality_comparison(first, second):
-    """Performs a simple != inequality comparison.
-    """
-
-    return first != second
 
 
 @istest

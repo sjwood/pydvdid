@@ -4,7 +4,9 @@
 
 from __future__ import absolute_import
 from mock import patch
-from nose.tools import eq_, istest
+from nose.tools import (
+    eq_, istest
+)
 from pydvdid.crc64calculator import _Crc64Calculator
 from pydvdid.crc64result import Crc64Result
 
@@ -66,7 +68,7 @@ def crc64calculator_update_correctly_updates_the__crc64_attribute(mock_init): # 
     calculator = _Crc64Calculator(0x1010)
     calculator._crc64 = 0xffffffffffffffff # pylint: disable=locally-disabled, protected-access
     calculator._lookup_table = [0xffffffffffffffff] # pylint: disable=locally-disabled, protected-access
-    calculator.update(str(chr(0xff)))
+    calculator.update(bytearray([0xff]))
 
     eq_(0xff00000000000000, calculator._crc64) # pylint: disable=locally-disabled, protected-access
 

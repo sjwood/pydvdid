@@ -5,16 +5,13 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from .exceptions import (
-    FileTimeOutOfRangeException,
-    PathDoesNotExistException,
+    FileContentReadException, FileTimeOutOfRangeException, PathDoesNotExistException,
     PydvdidException
 )
 from .functions import compute
 
 
 __all__ = [
-    "compute",
-    "FileTimeOutOfRangeException",
-    "PathDoesNotExistException",
-    "PydvdidException"
+    "compute", "FileContentReadException", "FileTimeOutOfRangeException",
+    "PathDoesNotExistException", "PydvdidException"
 ]

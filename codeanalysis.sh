@@ -48,7 +48,7 @@ then
 fi
 
 # invoke pylint for all python files in the directory
-pylint $SCRIPT_DIRECTORY/**/*.py
+pylint "$SCRIPT_DIRECTORY"/**/*.py
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then

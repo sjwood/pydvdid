@@ -45,11 +45,8 @@ then
     exit 1
 fi
 
-# set script directory as current directory
-cd $SCRIPT_DIRECTORY
-
 # find and execute tests
-nosetests --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70 --cover-erase --cover-html
+nosetests --where="$SCRIPT_DIRECTORY" --with-coverage --cover-branches --cover-inclusive --cover-min-percentage=70 --cover-erase --cover-html
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then

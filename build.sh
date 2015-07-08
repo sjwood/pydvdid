@@ -40,7 +40,7 @@ then
 fi
 
 # invoke compileall module for all python files in the directory
-python -m compileall -f $SCRIPT_DIRECTORY/**/*.py
+python -m compileall -f "$SCRIPT_DIRECTORY"/**/*.py
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]
 then

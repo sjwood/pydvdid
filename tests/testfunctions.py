@@ -5,20 +5,23 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from binascii import hexlify
-from mock import call, patch
-from nose_parameterized import parameterized, param
-from nose.tools import eq_, istest, nottest, ok_
+from mock import (
+    call, MagicMock, patch
+)
+from nose_parameterized import (
+    parameterized, param
+)
+from nose.tools import (
+    eq_, istest, nottest, ok_
+)
+from sys import version_info
 from pydvdid.exceptions import (
-    FileTimeOutOfRangeException,
-    PathDoesNotExistException
+    FileContentReadException, FileTimeOutOfRangeException, PathDoesNotExistException
 )
 from pydvdid.functions import (
-    _check_dvd_path_exists,
-    _check_video_ts_path_exists,
-    _get_file_creation_time,
-    _get_file_name,
-    _get_file_size,
-    _get_video_ts_file_paths
+    _check_dvd_path_exists, _check_video_ts_path_exists, _get_file_creation_time, _get_file_name,
+    _get_file_size, _get_first_64k_content, _get_video_ts_file_paths, _get_vmgi_file_content,
+    _get_vts01i_file_content
 )
 
 
@@ -108,8 +111,7 @@ def _get_video_ts_file_paths_returns_a_sorted_list_of_file_paths(mock_listdir, m
     """
 
     mock_listdir.return_value = [
-        "DVD_PATH/VIDEO_TS/VTS_01_0.VOB", "DVD_PATH/VIDEO_TS/unexpected_folder",
-        "DVD_PATH/VIDEO_TS/VTS_01_0.BUP", "DVD_PATH/VIDEO_TS/VTS_01_0.IFO"
+        "VTS_01_0.VOB", "unexpected_folder", "VTS_01_0.BUP", "VTS_01_0.IFO"
     ]
 
     mock_isfile.side_effect = [True, False, True, True]
@@ -218,8 +220,6 @@ def _get_file_size_returns_correctly(description, file_path, file_size, expected
     mock_getsize.assert_called_once_with(file_path)
 
 
-#param(b"Filename with Unicode euro char", u"\u20ac.txt", u"\u20ac.txt", b"\xe2\x82\xac.txt\x00")
-
 @istest
 @parameterized([
     param("Filename with Unicode euro char", "/VIDEO_TS/1\u20ac.txt", "1\u20ac.txt",
@@ -243,6 +243,163 @@ def _get_file_name_returns_correctly(description, file_path, file_name, expected
     eq_(expected, file_name_bytearray, assert_message)
 
     mock_basename.assert_called_once_with(file_path)
+
+
+@istest
+@patch("pydvdid.functions._get_first_64k_content")
+def _get_vmgi_file_content_calls_through_to__get_first_64k_content(mock_get_first_64k_content): # pylint: disable=locally-disabled, invalid-name
+    """Tests that invocation of _get_vmgi_file_content() calls a 'private' method to get the first
+       65536 bytes of the specified file.
+    """
+
+    mock_get_first_64k_content.return_value = bytearray([0xa7, 0x20, 0x38, 0x1f, 0xaa])
+
+    vmgi_file_content = _get_vmgi_file_content("DVD_PATH")
+
+    eq_(bytearray([0xa7, 0x20, 0x38, 0x1f, 0xaa]), vmgi_file_content)
+
+    mock_get_first_64k_content.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.IFO")
+
+
+@istest
+@patch("pydvdid.functions._get_first_64k_content")
+def _get_vts01i_file_content_calls_through_to__get_first_64k_content(mock_get_first_64k_content): # pylint: disable=locally-disabled, invalid-name
+    """Tests that invocation of _get_vts01i_file_content() calls a 'private' method to get the first
+       65536 bytes of the specified file.
+    """
+
+    mock_get_first_64k_content.return_value = bytearray([0x10, 0x31, 0x44, 0x0c])
+
+    vts01i_file_content = _get_vts01i_file_content("DVD_PATH")
+
+    eq_(bytearray([0x10, 0x31, 0x44, 0x0c]), vts01i_file_content)
+
+    mock_get_first_64k_content.assert_called_once_with("DVD_PATH/VIDEO_TS/VTS_01_0.IFO")
+
+
+@istest
+@patch("pydvdid.functions.isfile")
+def _get_first_64k_content_raises_exception_when_path_does_not_exist(mock_isfile): # pylint: disable=locally-disabled, invalid-name
+    """Tests that invocation of _get_first_64k_content() with an invalid path raises a
+       PathDoesNotExistException exception.
+    """
+
+    mock_isfile.return_value = False
+
+    try:
+        _get_first_64k_content("DVD_PATH/VIDEO_TS/VTS_99_0.IFO")
+    except PathDoesNotExistException:
+        pass
+    except Exception as exception: # pylint: disable=locally-disabled, broad-except
+        ok_(False, "An unexpected {0} exception was raised.".format(type(exception).__name__))
+    else:
+        ok_(False, "An exception was expected but was not raised.")
+
+    mock_isfile.assert_called_once_with("DVD_PATH/VIDEO_TS/VTS_99_0.IFO")
+
+
+@istest
+@parameterized([
+    param("DVD_PATH/VIDEO_TS/VTS_07_0.IFO", 5, None),
+    param("DVD_PATH/VIDEO_TS/VTS_02_0.IFO", 8, 4)
+])
+@patch(("__builtin__" if version_info[0] < 3 else "builtins") + ".open")
+@patch("pydvdid.functions.getsize")
+@patch("pydvdid.functions.isfile") # pylint: disable=locally-disabled, invalid-name, too-many-arguments
+def _get_first_64k_content_raises_exception_when_readinto_returns_insufficient_bytes(file_name,
+                                                                                     file_size,
+                                                                                     read_size,
+                                                                                     mock_isfile,
+                                                                                     mock_getsize,
+                                                                                     mock_open):
+    """Tests that invocation of _get_first_64k_content() raises a FileContentReadException when the
+       number of bytes requested to be read from an existent file specified by the supplied file
+       path cannot be read.
+    """
+
+    mock_isfile.return_value = True
+    mock_getsize.return_value = file_size
+    mock_file_object = MagicMock()
+    mock_open.return_value.__enter__.return_value = mock_file_object
+    mock_file_object.readinto.return_value = read_size
+
+    try:
+        _get_first_64k_content(file_name)
+    except FileContentReadException:
+        pass
+    except Exception as exception: # pylint: disable=locally-disabled, broad-except
+        ok_(False, "An unexpected {0} exception was raised.".format(type(exception).__name__))
+    else:
+        ok_(False, "An exception was expected but was not raised.")
+
+    mock_isfile.assert_called_once_with(file_name)
+    mock_getsize.assert_called_once_with(file_name)
+    mock_open.assert_called_once_with(file_name, "rb")
+    mock_file_object.readinto.assert_called_once_with(bytearray(file_size))
+
+
+@istest
+@patch(("__builtin__" if version_info[0] < 3 else "builtins") + ".open")
+@patch("pydvdid.functions.getsize")
+@patch("pydvdid.functions.isfile")
+def _get_first_64k_content_returns_correctly_when_file_content_less_than_64k(mock_isfile, # pylint: disable=locally-disabled, invalid-name
+                                                                             mock_getsize,
+                                                                             mock_open):
+    """Tests that invocation of _get_first_64k_content() returns the entire file content as a
+       bytearray for an existent file which is less than 64Kb in size.
+    """
+
+    mock_isfile.return_value = True
+    mock_getsize.return_value = 10
+    mock_file_object = MagicMock()
+    mock_open.return_value.__enter__.return_value = mock_file_object
+    expected_file_content = bytearray([0x43, 0x90, 0xdc, 0x18, 0xf4, 0xee, 0x25, 0x51, 0xb7, 0xa3])
+    def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
+        for index in range(0, len(byte_array)):
+            byte_array[index] = expected_file_content[index]
+        return len(byte_array)
+    mock_file_object.readinto.side_effect = _fake_readinto
+
+    first_64k_content = _get_first_64k_content("DVD_PATH/VIDEO_TS/VIDEO_TS.IFO")
+    eq_(expected_file_content, first_64k_content)
+
+    mock_isfile.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.IFO")
+    mock_getsize.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.IFO")
+    mock_open.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.IFO", "rb")
+    mock_file_object.readinto.assert_called_once_with(expected_file_content)
+
+
+@istest
+@patch(("__builtin__" if version_info[0] < 3 else "builtins") + ".open")
+@patch("pydvdid.functions.getsize")
+@patch("pydvdid.functions.isfile")
+def _get_first_64k_content_returns_correctly_when_file_content_greater_than_64k(mock_isfile, # pylint: disable=locally-disabled, invalid-name
+                                                                                mock_getsize,
+                                                                                mock_open):
+    """Tests that invocation of _get_first_64k_content() returns the first 64Kb of content as a
+       bytearray for an existent file which is greater than 64Kb in size.
+    """
+
+    mock_isfile.return_value = True
+    mock_getsize.return_value = 100000
+    mock_file_object = MagicMock()
+    mock_open.return_value.__enter__.return_value = mock_file_object
+    expected_file_content = bytearray(100000)
+    for index in range(0, len(expected_file_content)):
+        expected_file_content[index] = index & 0xff
+    def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
+        for index in range(0, len(byte_array)):
+            byte_array[index] = expected_file_content[index]
+        return len(byte_array)
+    mock_file_object.readinto.side_effect = _fake_readinto
+
+    first_64k_content = _get_first_64k_content("DVD_PATH/VIDEO_TS/VIDEO_TS.BUP")
+    eq_(expected_file_content[:65536], first_64k_content)
+
+    mock_isfile.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.BUP")
+    mock_getsize.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.BUP")
+    mock_open.assert_called_once_with("DVD_PATH/VIDEO_TS/VIDEO_TS.BUP", "rb")
+    mock_file_object.readinto.assert_called_once_with(expected_file_content[:65536])
 
 
 @nottest

@@ -6,13 +6,15 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from datetime import datetime
 from os import listdir
-from os.path import basename, getctime, getsize, isdir, isfile, join
+from os.path import (
+    basename, getctime, getsize, isdir, isfile, join
+)
 from struct import pack_into
 from .crc64calculator import _Crc64Calculator
 from .exceptions import (
-    FileTimeOutOfRangeException,
-    PathDoesNotExistException
+    FileContentReadException, FileTimeOutOfRangeException, PathDoesNotExistException
 )
+
 
 def compute(dvd_path):
     """Computes a Windows API IDvdInfo2::GetDiscID-compatible 64-bit Cyclic Redundancy Check
@@ -23,7 +25,7 @@ def compute(dvd_path):
 
     _check_video_ts_path_exists(dvd_path)
 
-    # the polynomial used for this checksum is:
+    # the polynomial used for this CRC-64 checksum is:
     # x^63 + x^60 + x^57 + x^55 + x^54 + x^50 + x^49 + x^46 + x^41 + x^38 + x^37 + x^34 + x^32 +
     # x^31 + x^30 + x^28 + x^25 + x^24 + x^21 + x^16 + x^13 + x^12 + x^11 + x^8 + x^7 + x^5 + x^2
     calculator = _Crc64Calculator(0x92c64265d32139a4)
@@ -32,6 +34,9 @@ def compute(dvd_path):
         calculator.update(_get_file_creation_time(video_ts_file_path))
         calculator.update(_get_file_size(video_ts_file_path))
         calculator.update(_get_file_name(video_ts_file_path))
+
+    calculator.update(_get_vmgi_file_content(dvd_path))
+    calculator.update(_get_vts01i_file_content(dvd_path))
 
     return calculator.crc64
 
@@ -48,10 +53,10 @@ def _check_video_ts_path_exists(dvd_path):
     """Raises an exception if the specified DVD path does not contain a VIDEO_TS folder.
     """
 
-    video_ts_path = join(dvd_path, "VIDEO_TS")
+    video_ts_folder_path = join(dvd_path, "VIDEO_TS")
 
-    if isdir(video_ts_path) == False:
-        raise PathDoesNotExistException(video_ts_path)
+    if isdir(video_ts_folder_path) == False:
+        raise PathDoesNotExistException(video_ts_folder_path)
 
 
 def _get_video_ts_file_paths(dvd_path):
@@ -59,11 +64,15 @@ def _get_video_ts_file_paths(dvd_path):
        DVD path.
     """
 
-    video_ts_files_path = join(dvd_path, "VIDEO_TS")
+    video_ts_folder_path = join(dvd_path, "VIDEO_TS")
 
-    video_ts_paths = listdir(video_ts_files_path)
+    video_ts_file_paths = []
 
-    video_ts_file_paths = [path for path in video_ts_paths if isfile(path)]
+    for video_ts_folder_content_name in listdir(video_ts_folder_path):
+        video_ts_folder_content_path = join(video_ts_folder_path, video_ts_folder_content_name)
+
+        if isfile(video_ts_folder_content_path):
+            video_ts_file_paths.append(video_ts_folder_content_path)
 
     return sorted(video_ts_file_paths)
 
@@ -124,5 +133,48 @@ def _get_file_name(file_path):
     file_name = basename(file_path)
 
     utf8_file_name = bytearray(file_name, "utf8")
+    utf8_file_name.append(0)
 
-    return utf8_file_name + bytearray([0x00])
+    return utf8_file_name
+
+
+def _get_vmgi_file_content(dvd_path):
+    """Returns the first 65536 bytes (or the file size, whichever is smaller) of the VIDEO_TS.IFO
+       file in the VIDEO_TS folder of the specified DVD path, as a bytearray.
+    """
+
+    vmgi_file_path = join(dvd_path, "VIDEO_TS", "VIDEO_TS.IFO")
+
+    return _get_first_64k_content(vmgi_file_path)
+
+
+def _get_vts01i_file_content(dvd_path):
+    """Returns the first 65536 (or the file size, whichever is smaller) bytes of the VTS_01_0.IFO
+       file in the VIDEO_TS folder of the specified DVD path, as a bytearray.
+    """
+
+    vts01i_file_path = join(dvd_path, "VIDEO_TS", "VTS_01_0.IFO")
+
+    return _get_first_64k_content(vts01i_file_path)
+
+
+def _get_first_64k_content(file_path):
+    """Returns the first 65536 (or the file size, whichever is smaller) bytes of the file at the
+       specified file path, as a bytearray.
+    """
+
+    if isfile(file_path) == False:
+        raise PathDoesNotExistException(file_path)
+
+    file_size = getsize(file_path)
+
+    content_size = min(file_size, 0x10000)
+
+    content = bytearray(content_size)
+    with open(file_path, "rb") as file_object:
+        content_read = file_object.readinto(content)
+
+        if content_read is None or content_read < content_size:
+            raise FileContentReadException(content_size, content_read)
+
+    return content

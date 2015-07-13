@@ -18,28 +18,25 @@ pydvdid is envisaged to be useful for DVD ripping scripts, custom Growl notifica
 
 Works for Python versions 2 and 3, from 2.6 through to the nightly build.
 
-## How to get
+## Availability
 
-Available on [PyPI][11].
+Get it on [PyPI][11].
+
+[![PyPI status][12]][11]
+[![PyPI version][13]][11]
+[![PyPI format][14]][11]
+[![PyPI python versions][15]][11]
+
+Install:
+
+```sh
+pip install pydvdid
+```
 
 ## Example
 
 ```sh
-sjwood@desktop:~$ mktemp --directory
-/tmp/tmp.mLLZaPNHDq
-sjwood@desktop:~$ virtualenv --python=python2.7 /tmp/tmp.mLLZaPNHDq/
-Running virtualenv with interpreter /usr/bin/python2.7
-New python executable in /tmp/tmp.mLLZaPNHDq/bin/python2.7
-Also creating executable in /tmp/tmp.mLLZaPNHDq/bin/python
-Installing setuptools, pip...done.
-sjwood@desktop:~$ source /tmp/tmp.mLLZaPNHDq/bin/activate
-(tmp.mLLZaPNHDq)sjwood@desktop:~$ pip install pydvdid
-Collecting pydvdid
-  Downloading pydvdid-0.1.tar.gz
-Installing collected packages: pydvdid
-  Running setup.py install for pydvdid
-Successfully installed pydvdid-0.1
-(tmp.mLLZaPNHDq)sjwood@desktop:~$ python
+sjwood@desktop:~$ python
 Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
 [GCC 4.8.2] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
@@ -54,7 +51,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ## License
 
-[Apache License, Version 2.0][12]
+[Apache License, Version 2.0][16]
 
   [1]: https://img.shields.io/travis/sjwood/pydvdid.svg
   [2]: https://travis-ci.org/sjwood/pydvdid
@@ -67,4 +64,8 @@ Type "help", "copyright", "credits" or "license" for more information.
   [9]: https://en.wikipedia.org/wiki/Cyclic_redundancy_check
   [10]: http://dvdid.cjkey.org.uk/
   [11]: https://pypi.python.org/pypi/pydvdid
-  [12]: https://raw.githubusercontent.com/sjwood/pydvdid/master/LICENSE
+  [12]: https://img.shields.io/pypi/status/pydvdid.svg
+  [13]: https://img.shields.io/pypi/v/pydvdid.svg
+  [14]: https://img.shields.io/pypi/format/pydvdid.svg
+  [15]: https://img.shields.io/pypi/pyversions/pydvdid.svg
+  [16]: https://raw.githubusercontent.com/sjwood/pydvdid/master/LICENSE

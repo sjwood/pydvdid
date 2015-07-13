@@ -60,6 +60,17 @@ do
     fi
 done
 
+# delete the distribution directory
+if [ -d "$SCRIPT_DIRECTORY/dist" ]
+then
+    rm --recursive --force "$SCRIPT_DIRECTORY/dist"
+    if [ $? -ne 0 ]
+    then
+        __echo_to_stderr "Cannot delete distribution folder"
+        exit 1
+    fi
+fi
+
 # delete the coverage file
 if [ -f "$SCRIPT_DIRECTORY/.coverage" ]
 then

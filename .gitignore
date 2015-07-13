@@ -3,6 +3,7 @@
 
 # packaging folders
 *.egg-info/
+dist/
 
 # test coverage files
 .coverage

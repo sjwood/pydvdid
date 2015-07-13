@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name="pydvdid",
-    version="0.2",
+    version="1.0",
     description="A pure Python implementation of the Windows API IDvdInfo2::GetDiscID method, as used by Windows Media Center to compute a 'practically unique' 64-bit CRC for metadata retrieval.", # pylint: disable=locally-disabled, line-too-long
     author="Steve Wood",
     author_email="octocat@nym.hush.com",
@@ -16,7 +16,7 @@ setup(
         "pydvdid"
     ],
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Natural Language :: English",

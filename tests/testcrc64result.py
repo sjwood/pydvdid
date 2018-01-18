@@ -10,7 +10,7 @@ from mock import (
 from nose.tools import (
     eq_, istest
 )
-from nose_parameterized import (
+from parameterized import (
     parameterized, param
 )
 from pydvdid.crc64result import Crc64Result
@@ -76,12 +76,12 @@ def crc64result_equality_and_inequality_comparisons_return_correctly(description
                                                                      expected, mock_init):
     """Tests that invocation of == and != equality comparisons return correctly.
 
-       (This is a Nose generator test which receives a set of data provided by nose-parameterized).
+       (This is a Nose generator test which receives a set of data provided by parameterized).
     """
 
     mock_init.return_value = None
 
-    # nose-parameterized can only pass through primitives, so get function from name string
+    # parameterized can only pass through primitives, so get function from name string
     if comparison_function_name == "==":
         comparison_function = lambda first, second: first == second
     elif comparison_function_name == "!=":

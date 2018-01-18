@@ -11,7 +11,7 @@ from sys import version_info
 from mock import (
     call, MagicMock, patch
 )
-from nose_parameterized import (
+from parameterized import (
     parameterized, param
 )
 from nose.tools import (

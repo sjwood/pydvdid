@@ -8,7 +8,7 @@ from inspect import (
     getmembers, isclass
 )
 from mock import patch
-from nose_parameterized import (
+from parameterized import (
     parameterized, param
 )
 from nose.tools import (

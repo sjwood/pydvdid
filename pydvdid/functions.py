@@ -45,7 +45,7 @@ def _check_dvd_path_exists(dvd_path):
     """Raises an exception if the specified DVD path does not exist.
     """
 
-    if isdir(dvd_path) == False:
+    if not isdir(dvd_path):
         raise PathDoesNotExistException(dvd_path)
 
 
@@ -55,7 +55,7 @@ def _check_video_ts_path_exists(dvd_path):
 
     video_ts_folder_path = join(dvd_path, "VIDEO_TS")
 
-    if isdir(video_ts_folder_path) == False:
+    if not isdir(video_ts_folder_path):
         raise PathDoesNotExistException(video_ts_folder_path)
 
 
@@ -163,7 +163,7 @@ def _get_first_64k_content(file_path):
        specified file path, as a bytearray.
     """
 
-    if isfile(file_path) == False:
+    if not isfile(file_path):
         raise PathDoesNotExistException(file_path)
 
     file_size = getsize(file_path)

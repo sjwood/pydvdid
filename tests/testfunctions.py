@@ -7,6 +7,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from binascii import hexlify
+from sys import version_info
 from mock import (
     call, MagicMock, patch
 )
@@ -16,7 +17,6 @@ from nose_parameterized import (
 from nose.tools import (
     eq_, istest, nottest, ok_
 )
-from sys import version_info
 from pydvdid.exceptions import (
     FileContentReadException, FileTimeOutOfRangeException, PathDoesNotExistException
 )
@@ -357,7 +357,7 @@ def _get_first_64k_content_returns_correctly_when_file_content_less_than_64k(moc
     mock_open.return_value.__enter__.return_value = mock_file_object
     expected_file_content = bytearray([0x43, 0x90, 0xdc, 0x18, 0xf4, 0xee, 0x25, 0x51, 0xb7, 0xa3])
     def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
-        for index in range(0, len(byte_array)):
+        for index, value in enumerate(byte_array):
             byte_array[index] = expected_file_content[index]
         return len(byte_array)
     mock_file_object.readinto.side_effect = _fake_readinto
@@ -387,10 +387,10 @@ def _get_first_64k_content_returns_correctly_when_file_content_greater_than_64k(
     mock_file_object = MagicMock()
     mock_open.return_value.__enter__.return_value = mock_file_object
     expected_file_content = bytearray(100000)
-    for index in range(0, len(expected_file_content)):
+    for index, value in enumerate(expected_file_content):
         expected_file_content[index] = index & 0xff
     def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
-        for index in range(0, len(byte_array)):
+        for index, value in enumerate(byte_array):
             byte_array[index] = expected_file_content[index]
         return len(byte_array)
     mock_file_object.readinto.side_effect = _fake_readinto

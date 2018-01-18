@@ -7,3 +7,4 @@ omit =
     */pypy-?.?.?/*
     */pypy3-?.?.?/*
     */tests/*
+    */mock/*

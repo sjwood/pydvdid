@@ -12,9 +12,8 @@ python:
     - "pypy3"
     - "nightly"
 script:
-    - "$TRAVIS_BUILD_DIR/build.sh"
-    - "$TRAVIS_BUILD_DIR/test.sh"
-    - echo "$TRAVIS_PYTHON_VERSION"
+    - if [ "$TRAVIS_PYTHON_VERSION" != "3.2" ]; then "$TRAVIS_BUILD_DIR/build.sh"; else echo "Travis CI build broken on Python 3.2 due to https://github.com/travis-ci/travis-ci/issues/4866"; fi
+    - if [ "$TRAVIS_PYTHON_VERSION" != "3.2" ]; then "$TRAVIS_BUILD_DIR/test.sh"; else echo "Travis CI build broken on Python 3.2 due to https://github.com/travis-ci/travis-ci/issues/4866"; fi
     - if [ "$TRAVIS_PYTHON_VERSION" != "2.6" ] && [ "$TRAVIS_PYTHON_VERSION" != "3.2" ] && [ "$TRAVIS_PYTHON_VERSION" != "nightly" ]; then "$TRAVIS_BUILD_DIR/codeanalysis.sh"; fi
 after_success:
     - coveralls

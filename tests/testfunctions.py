@@ -357,8 +357,8 @@ def _get_first_64k_content_returns_correctly_when_file_content_less_than_64k(moc
     mock_open.return_value.__enter__.return_value = mock_file_object
     expected_file_content = bytearray([0x43, 0x90, 0xdc, 0x18, 0xf4, 0xee, 0x25, 0x51, 0xb7, 0xa3])
     def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
-        for index in enumerate(byte_array):
-            byte_array[index] = expected_file_content[index]
+        for item in enumerate(byte_array):
+            byte_array[item[0]] = expected_file_content[item[0]]
         return len(byte_array)
     mock_file_object.readinto.side_effect = _fake_readinto
 
@@ -387,11 +387,11 @@ def _get_first_64k_content_returns_correctly_when_file_content_greater_than_64k(
     mock_file_object = MagicMock()
     mock_open.return_value.__enter__.return_value = mock_file_object
     expected_file_content = bytearray(100000)
-    for index in enumerate(expected_file_content):
-        expected_file_content[index] = index & 0xff
+    for item in enumerate(expected_file_content):
+        expected_file_content[item[0]] = item[0] & 0xff
     def _fake_readinto(byte_array): # pylint: disable=locally-disabled, missing-docstring
-        for index in enumerate(byte_array):
-            byte_array[index] = expected_file_content[index]
+        for item in enumerate(byte_array):
+            byte_array[item[0]] = expected_file_content[item[0]]
         return len(byte_array)
     mock_file_object.readinto.side_effect = _fake_readinto
 

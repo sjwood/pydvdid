@@ -6,6 +6,7 @@ omit =
     */python?.?/*
     */pypy-?.?.?/*
     */pypy3-?.?.?/*
+    */site-packages/*
     */tests/*
     */funcsigs/*
     */mock/*

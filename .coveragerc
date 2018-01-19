@@ -7,4 +7,8 @@ omit =
     */pypy-?.?.?/*
     */pypy3-?.?.?/*
     */tests/*
+    */funcsigs/*
     */mock/*
+    */parameterized/*
+    */pbr/*
+    */six.py

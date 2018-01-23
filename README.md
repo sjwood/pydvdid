@@ -20,7 +20,7 @@ Works for Python versions 2 and 3, from 2.6 through to the nightly build.
 
 ## Availability
 
-Get it from PyPI or directly from GitHub.
+Get it from [PyPI][12] or directly from GitHub.
 
 #### PyPI:
 
@@ -37,25 +37,33 @@ pip install pydvdid
 
 [Releases][16]
 
-## Example
+## Examples
+
+#### From the shell:
+
+```sh
+steve@babbage:~$ crc64=$(pydvdid /mnt/dvd)
+steve@babbage:~$ echo $crc64
+6e23e6a41a154405
+steve@babbage:~$ curl --get http://metaservices.windowsmedia.com/pas_dvd_B/template/GetMDRDVDByCRC.xml?CRC=$crc64
+<?xml version='1.0' encoding="UTF-8" ?><METADATA xmlns:sql="urn:schemas-microsoft-com:xml-sql">
+	
+	<MDR-DVD><version>4.0</version><dvdTitle>LEGO Star Wars: The Padawan Menace [French] [Blu-ray/DVD]</dvdTitle><studio>20th Century Fox Home Entertainment (Canadian</studio><leadPerformer></leadPerformer><actors></actors><director></director><MPAARating></MPAARating><releaseDate>2012 02 07</releaseDate><genre>Science Fiction</genre><dataProvider>AMG</dataProvider><wmid_dvd>7DDE9379-18E0-446A-8214-BCD3D573A54A</wmid_dvd><dv_id>E   278184          </dv_id><dataProviderParams>Provider=AMG</dataProviderParams><dataProviderLogo>Provider=AMG</dataProviderLogo><moreInfoParams></moreInfoParams><title><titleNum>1</titleNum><titleTitle>LEGO Star Wars: The Padawan Menace [French] [Blu-ray/DVD]</titleTitle><studio>20th Century Fox Home Entertainment (Canadian</studio><director></director><leadPerformer></leadPerformer><actors></actors><MPAARating></MPAARating><genre>Science Fiction</genre><providerRating></providerRating><communityRating></communityRating></title></MDR-DVD>
+</METADATA>
+```
+
+#### From Python:
 
 pydvdid has a decidely simple API, with the important bits imported into the package level so they can be conveniently imported directly from the package.
 
-#### Computing a dvdid value
-
 ```sh
->>> import pydvdid
->>> crc64 = pydvdid.compute("/mnt/dvd")
+>>> from pydvdid import compute
+>>> crc64 = compute("/mnt/dvd")
 >>> str(crc64)
-'9376311e277b3e90'
-```
-
-#### Using a dvdid value
-
-```sh
->>> import urllib
->>> urllib.urlopen("http://metaservices.windowsmedia.com/pas_dvd_B/template/GetMDRDVDByCRC.xml?CRC={0}".format(crc64)).read()
-'<?xml version=\'1.0\' encoding="UTF-8" ?><METADATA xmlns:sql="urn:schemas-microsoft-com:xml-sql">\r\n\t\r\n\t<MDR-DVD><version>4.0</version><dvdTitle>Shrek</dvdTitle><studio></studio><leadPerformer></leadPerformer><actors></actors><director></director><MPAARating>NR</MPAARating><releaseDate>2004 05 11</releaseDate><genre>Children&apos;s/Family</genre><dataProvider>AMG</dataProvider><wmid_dvd>E0F3B718-D539-48E8-A77C-72B71603F38E</wmid_dvd><dv_id>E    50745_1        </dv_id><dataProviderParams>Provider=AMG</dataProviderParams><dataProviderLogo>Provider=AMG</dataProviderLogo><moreInfoParams></moreInfoParams><title><titleNum>1</titleNum><titleTitle>Shrek</titleTitle><studio></studio><director></director><leadPerformer></leadPerformer><actors></actors><MPAARating>NR</MPAARating><genre>Children&apos;s/Family</genre><communityRating></communityRating><chapter><chapterNum>1</chapterNum><chapterTitle>Once Upon a Time (Main Title) [:34]</chapterTitle></chapter><chapter><chapterNum>2</chapterNum><chapterTitle>A Flying Talking Donkey [2:59]</chapterTitle></chapter><chapter><chapterNum>3</chapterNum><chapterTitle>What Are You Doing in My Swamp? [1:22]</chapterTitle></chapter><chapter><chapterNum>4</chapterNum><chapterTitle>Lord Farquaad [1:45]</chapterTitle></chapter><chapter><chapterNum>5</chapterNum><chapterTitle>The Kingdom of DuLoc [1:33]</chapterTitle></chapter><chapter><chapterNum>6</chapterNum><chapterTitle>Ogres Are Like Onions [:19]</chapterTitle></chapter><chapter><chapterNum>7</chapterNum><chapterTitle>The Dragon&apos;s Keep [2:00]</chapterTitle></chapter><chapter><chapterNum>8</chapterNum><chapterTitle>Rescuing the Princess [:31]</chapterTitle></chapter><chapter><chapterNum>9</chapterNum><chapterTitle>Remove Your Helmet [:36]</chapterTitle></chapter><chapter><chapterNum>10</chapterNum><chapterTitle>Campfire [2:22]</chapterTitle></chapter><chapter><chapterNum>11</chapterNum><chapterTitle>Merry Men [1:55]</chapterTitle></chapter><chapter><chapterNum>12</chapterNum><chapterTitle>Weedrat Dinner [1:35]</chapterTitle></chapter><chapter><chapterNum>13</chapterNum><chapterTitle>You Are the Princess [2:36]</chapterTitle></chapter><chapter><chapterNum>14</chapterNum><chapterTitle>The Proposal [:01]</chapterTitle></chapter><chapter><chapterNum>15</chapterNum><chapterTitle>Wedding Preparation [3:03]</chapterTitle></chapter><chapter><chapterNum>16</chapterNum><chapterTitle>That&apos;s What Friends Are For [2:05]</chapterTitle></chapter><chapter><chapterNum>17</chapterNum><chapterTitle>The Wedding [:59]</chapterTitle></chapter><chapter><chapterNum>18</chapterNum><chapterTitle>Love&apos;s True Form [3:19]</chapterTitle></chapter><chapter><chapterNum>19</chapterNum><chapterTitle>I&apos;m a Believer [1:50]</chapterTitle></chapter><chapter><chapterNum>20</chapterNum><chapterTitle>End Credits [:11]</chapterTitle></chapter></title></MDR-DVD>\r\n</METADATA>'
+'a5acf20f2e56954b'
+>>> from urllib import urlopen
+>>> urlopen("http://metaservices.windowsmedia.com/pas_dvd_B/template/GetMDRDVDByCRC.xml?CRC={0}".format(crc64)).read()
+'<?xml version=\'1.0\' encoding="UTF-8" ?><METADATA xmlns:sql="urn:schemas-microsoft-com:xml-sql">\r\n\t\r\n\t<MDR-DVD><version>4.0</version><dvdTitle>Room on the Broom</dvdTitle><studio>N Circle Entertainment</studio><leadPerformer>Gillian Anderson; Rob Brydon; Martin Clunes; Sally Hawkins; Simon Pegg; Timothy Spall</leadPerformer><actors>Gillian Anderson; Rob Brydon; Martin Clunes; Sally Hawkins; Simon Pegg; Timothy Spall</actors><director>Jan Lachauer; Max Lang</director><MPAARating></MPAARating><releaseDate>2013 08 06</releaseDate><genre>Children&apos;s/Family</genre><largeCoverParams>cov150/drv600/v691/v69118k4p4h.jpg</largeCoverParams><smallCoverParams>cov075/drv600/v691/v69118k4p4h.jpg</smallCoverParams><dataProvider>AMG</dataProvider><wmid_dvd>E568D84B-4CB8-4296-8896-716DDCFA1458</wmid_dvd><dv_id>E   303360          </dv_id><dataProviderParams>Provider=AMG</dataProviderParams><dataProviderLogo>Provider=AMG</dataProviderLogo><moreInfoParams></moreInfoParams><title><titleNum>1</titleNum><titleTitle>Room on the Broom</titleTitle><studio>N Circle Entertainment</studio><director>Jan Lachauer; Max Lang</director><leadPerformer>Gillian Anderson; Rob Brydon; Martin Clunes; Sally Hawkins; Simon Pegg; Timothy Spall</leadPerformer><actors>Gillian Anderson; Rob Brydon; Martin Clunes; Sally Hawkins; Simon Pegg; Timothy Spall</actors><MPAARating></MPAARating><genre>Children&apos;s/Family</genre><providerRating></providerRating><communityRating></communityRating><chapter><chapterNum>1</chapterNum><chapterTitle>Scene One [4:47]</chapterTitle></chapter><chapter><chapterNum>2</chapterNum><chapterTitle>Scene Two [7:29]</chapterTitle></chapter><chapter><chapterNum>3</chapterNum><chapterTitle>Scene Three [4:31]</chapterTitle></chapter><chapter><chapterNum>4</chapterNum><chapterTitle>Scene Four [9:55]</chapterTitle></chapter></title></MDR-DVD>\r\n</METADATA>'
 ```
 
 ## License

@@ -49,9 +49,21 @@ then
     __echo_to_stderr "Cannot publish to PyPI test"
     exit 1
 fi
+python "$SCRIPT_DIRECTORY/setup.py" bdist_wheel upload --repository https://testpypi.python.org/pypi
+if [ $? -ne 0 ]
+then
+    __echo_to_stderr "Cannot publish to PyPI test"
+    exit 1
+fi
 
 # publish to PyPI
 python "$SCRIPT_DIRECTORY/setup.py" sdist upload --repository https://pypi.python.org/pypi
+if [ $? -ne 0 ]
+then
+    __echo_to_stderr "Cannot publish to PyPI"
+    exit 1
+fi
+python "$SCRIPT_DIRECTORY/setup.py" bdist_wheel upload --repository https://pypi.python.org/pypi
 if [ $? -ne 0 ]
 then
     __echo_to_stderr "Cannot publish to PyPI"

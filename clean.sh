@@ -71,6 +71,17 @@ then
     fi
 fi
 
+# delete the build directory
+if [ -d "$SCRIPT_DIRECTORY/build" ]
+then
+    rm --recursive --force "$SCRIPT_DIRECTORY/build"
+    if [ $? -ne 0 ]
+    then
+        __echo_to_stderr "Cannot delete build folder"
+        exit 1
+    fi
+fi
+
 # delete the coverage file
 if [ -f "$SCRIPT_DIRECTORY/.coverage" ]
 then

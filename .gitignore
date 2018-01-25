@@ -4,6 +4,7 @@
 # packaging folders
 *.egg-info/
 dist/
+build/
 
 # test coverage files
 .coverage

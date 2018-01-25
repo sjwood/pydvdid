@@ -42,31 +42,33 @@ then
     exit 1
 fi
 
-# publish to PyPI test site
-python "$SCRIPT_DIRECTORY/setup.py" sdist upload --repository https://test.pypi.org/legacy/
+# package distributions
+python "$SCRIPT_DIRECTORY/setup.py" sdist
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot publish to PyPI test"
+    __echo_to_stderr "Cannot package source distribution"
     exit 1
 fi
-python "$SCRIPT_DIRECTORY/setup.py" bdist_wheel upload --repository https://test.pypi.org/legacy/
+python "$SCRIPT_DIRECTORY/setup.py" bdist_wheel --universal
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot publish to PyPI test"
+    __echo_to_stderr "Cannot package wheel distribution"
     exit 1
 fi
 
-# publish to PyPI
-python "$SCRIPT_DIRECTORY/setup.py" sdist upload --repository https://upload.pypi.org/legacy/
+# upload to PyPI test site
+twine upload -r pypitest dist/*
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot publish to PyPI"
+    __echo_to_stderr "Cannot upload to PyPI test"
     exit 1
 fi
-python "$SCRIPT_DIRECTORY/setup.py" bdist_wheel upload --repository https://upload.pypi.org/legacy/
+
+# upload to PyPI
+twine upload -r pypi dist/*
 if [ $? -ne 0 ]
 then
-    __echo_to_stderr "Cannot publish to PyPI"
+    __echo_to_stderr "Cannot upload to PyPI"
     exit 1
 fi
 
@@ -77,7 +79,6 @@ then
     __echo_to_stderr "Cannot tag release in git"
     exit 1
 fi
-
 git push origin v$VERSION
 if [ $? -ne 0 ]
 then

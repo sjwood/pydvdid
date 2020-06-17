@@ -11,12 +11,15 @@ with open('README.rst') as readme_file:
 
 setup(
     name="pydvdid",
-    version="1.1",
+    version="1.2",
     description="A pure Python implementation of the Windows API IDvdInfo2::GetDiscID method, as used by Windows Media Center to compute a 'practically unique' 64-bit CRC for metadata retrieval.", # pylint: disable=locally-disabled, line-too-long
     long_description=README,
     author="Steve Wood",
     author_email="octocat@nym.hush.com",
     url="https://github.com/sjwood/pydvdid",
+    install_requires=[
+        "pycdlib>=1.10.0"
+    ],
     packages=[
         "pydvdid"
     ],
@@ -38,6 +41,8 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Home Automation",
         "Topic :: Multimedia :: Video",
         "Topic :: Software Development :: Libraries :: Python Modules",

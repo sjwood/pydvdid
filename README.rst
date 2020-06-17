@@ -23,6 +23,8 @@ Compatibility
 
 Works for Python versions 2 and 3, from 2.6 through to the nightly build.
 
+Support for Windows, Mac OS and Linux.
+
 Availability
 ============
 
@@ -53,7 +55,7 @@ From the shell:
 
 .. code-block:: sh
 
-    steve@babbage:~$ crc64=$(pydvdid /mnt/dvd)
+    steve@babbage:~$ crc64=$(pydvdid /mnt/dvd)  // or "/dev/sr0"
     steve@babbage:~$ echo $crc64
     6e23e6a41a154405
     steve@babbage:~$ curl --get http://metaservices.windowsmedia.com/pas_dvd_B/template/GetMDRDVDByCRC.xml?CRC=$crc64
@@ -70,7 +72,7 @@ pydvdid has a decidely simple API, with the important bits imported into the pac
 .. code-block:: python
 
     >>> from pydvdid import compute
-    >>> crc64 = compute("/mnt/dvd")
+    >>> crc64 = compute("/mnt/dvd")  # or "/dev/sr0", or "E:" e.t.c
     >>> str(crc64)
     'a5acf20f2e56954b'
     >>> from urllib import urlopen

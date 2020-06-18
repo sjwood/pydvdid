@@ -18,7 +18,8 @@ setup(
     author_email="octocat@nym.hush.com",
     url="https://github.com/sjwood/pydvdid",
     install_requires=[
-        "pycdlib>=1.10.0"
+        "pycdlib>=1.10.0",
+        "python-dateutil>=2.8.1"
     ],
     packages=[
         "pydvdid"
